@@ -1,5 +1,7 @@
 # PS-01 synthesizer
 
+[![Build Status](https://travis-ci.org/suda/ps-01.svg?branch=master)](https://travis-ci.org/suda/ps-01)
+
 Particle Photon based chiptune synthesizer.
 
 ## Code architecture
