@@ -2,4 +2,7 @@ sudo: false
 language: node_js
 install:
   - npm install particle-cli
+before_script:
+  - mkdir ~/.particle
+  - echo $PARTICLE_CONFIG_JSON > ~/.particle/particle.config.json
 script: particle compile p . && stat photon_firmware_*
