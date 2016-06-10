@@ -24,7 +24,10 @@ This is similar to having two [SID chips](https://en.wikipedia.org/wiki/MOS_Tech
 
 ### `/midi`
 
-MIDI over USB-OTG interface.
+MIDI abstraction including:
+* MIDI over USB-OTG interface
+* MIDI over DIN5 connector
+* QWERTY keyboard support
 
 ### `/sequencer`
 
@@ -37,3 +40,9 @@ User interface (physical buttons, leds and screen) code.
 ### `/lib`
 
 Vendored 3rd party libraries.
+
+## References
+
+* https://ccrma.stanford.edu/software/stk/
+* [VICE - C64 emulator with multiple SID implementations (reSID, FastSID)](http://vice-emu.sourceforge.net/index.html#download)
+* [NES Audio - series of videos explaining some chiptune effects](https://www.youtube.com/playlist?list=PLW9dSXWX1cLKxzAsxP4dfWyhK3B1bAzJg)
