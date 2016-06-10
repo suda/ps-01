@@ -1,7 +1,8 @@
 #ifndef SYNTH_H_
 #define SYNTH_H_
 
-#include <SparkIntervalTimer.h>
+#include "lib/SparkIntervalTimer/SparkIntervalTimer.h"
+#include "fastsid_synth_engine.h"
 
 #define CHANNEL_LEFT DAC1
 #define CHANNEL_RIGHT DAC2
@@ -20,6 +21,6 @@ class Synth {
 	private:
 		void
 			renderSample(void);
-}
+};
 
 #endif /* SYNTH_H_ */

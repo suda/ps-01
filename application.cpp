@@ -1,6 +1,6 @@
 #include "application.h"
 
-#include <synth.h>
+#include "synth/synth.h"
 
 Synth synth;
 
