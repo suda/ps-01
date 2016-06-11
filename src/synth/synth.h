@@ -1,7 +1,7 @@
 #ifndef SYNTH_H_
 #define SYNTH_H_
 
-#include "lib/SparkIntervalTimer/SparkIntervalTimer.h"
+#include "SparkIntervalTimer.h"
 #include "fastsid_synth_engine.h"
 
 #define CHANNEL_LEFT DAC1

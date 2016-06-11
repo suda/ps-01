@@ -6,7 +6,7 @@ Particle Photon based chiptune synthesizer.
 
 ## Code architecture
 
-### `/synth`
+### `/src/synth`
 
 Main sound synthesis code including voices, ADSR and effects.
 
@@ -22,18 +22,18 @@ Proposed features of the engine are:
 
 This is similar to having two [SID chips](https://en.wikipedia.org/wiki/MOS_Technology_SID#Features).
 
-### `/midi`
+### `/src/midi`
 
 MIDI abstraction including:
 * MIDI over USB-OTG interface
 * MIDI over DIN5 connector
 * QWERTY keyboard support
 
-### `/sequencer`
+### `/src/sequencer`
 
 Code for controlling sound engine and generate actual music out of sounds. Does things like chords, arpeggio, note to frequency conversion.
 
-### `/ui`
+### `/src/ui`
 
 User interface (physical buttons, leds and screen) code.
 
@@ -46,3 +46,4 @@ Vendored 3rd party libraries.
 * https://ccrma.stanford.edu/software/stk/
 * [VICE - C64 emulator with multiple SID implementations (reSID, FastSID)](http://vice-emu.sourceforge.net/index.html#download)
 * [NES Audio - series of videos explaining some chiptune effects](https://www.youtube.com/playlist?list=PLW9dSXWX1cLKxzAsxP4dfWyhK3B1bAzJg)
+* [wavepot - tool for live sound synthesis](http://wavepot.com/)
