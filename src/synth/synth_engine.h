@@ -1,6 +1,7 @@
 #ifndef SYNTH_ENGINE_H_
 #define SYNTH_ENGINE_H_
 
+#include <stdint.h>
 #include "voice.h"
 
 #pragma once

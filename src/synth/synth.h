@@ -1,15 +1,20 @@
 #ifndef SYNTH_H_
 #define SYNTH_H_
 
+#if defined(PARTICLE)
 #include "SparkIntervalTimer.h"
-#include "fastsid_synth_engine.h"
 
 #define CHANNEL_LEFT DAC1
 #define CHANNEL_RIGHT DAC2
+#endif
+
+#include "fastsid_synth_engine.h"
 
 #pragma once
 class Synth {
+#if defined(PARTICLE)
 	IntervalTimer __timer;
+#endif
 
 	public:
 		Synth();
