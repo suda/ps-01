@@ -20,6 +20,12 @@ typedef enum {
 	NO_WAVE  = 5
 } Waveform;
 
+typedef enum {
+    BOTH  = 0,
+    LEFT  = 1,
+    RIGHT = 2
+} Channel;
+
 /**
  * A voice is a single sound generator. This class contains all its parameters
  * which should be used by synth engine when rendering samples.
@@ -29,8 +35,13 @@ class Voice {
 		Voice();
 		virtual ~Voice();
 
-		void setAdsr(int attack, int decay, int sustain, int release);
 		void setWaveform(Waveform waveform);
+        void setFrequency(int frequency);
+        void setPulseWidth(int pulseWidth);
+        void setAdsr(int attack, int decay, int sustain, int release);
+        // Set to true for Attack/Decay/Sustain cycle and false for Release cycle
+        void setGate(bool gate);
+        void setChannel(Channel channel);
 };
 
 #endif /* VOICE_H_ */

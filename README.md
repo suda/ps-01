@@ -47,3 +47,4 @@ Vendored 3rd party libraries.
 * [VICE - C64 emulator with multiple SID implementations (reSID, FastSID)](http://vice-emu.sourceforge.net/index.html#download)
 * [NES Audio - series of videos explaining some chiptune effects](https://www.youtube.com/playlist?list=PLW9dSXWX1cLKxzAsxP4dfWyhK3B1bAzJg)
 * [wavepot - tool for live sound synthesis](http://wavepot.com/)
+* [SID chip datasheet](http://www.waitingforfriday.com/index.php/Commodore_SID_6581_Datasheet)

@@ -3,17 +3,22 @@
 
 #if defined(PARTICLE)
 #include "SparkIntervalTimer.h"
-
-#define CHANNEL_LEFT DAC1
-#define CHANNEL_RIGHT DAC2
+#include "dac_sound_output.h"
+#else
+#include <stdint.h>
+#include "file_sound_output.h"
 #endif
 
-#include "fastsid_synth_engine.h"
+#include "voice.h"
 
 #pragma once
 class Synth {
 #if defined(PARTICLE)
 	IntervalTimer __timer;
+    DacSoundOutput __output;
+#else
+    // TODO: Timer from Boost
+	FileSoundOutput __output;
 #endif
 
 	public:
@@ -22,6 +27,8 @@ class Synth {
 
 		void
 			begin();
+
+		Voice getVoice(int voiceNumber);
 
 	private:
 		void

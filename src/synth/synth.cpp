@@ -1,7 +1,13 @@
 #include "synth.h"
 
 Synth::Synth() {
-	/*__timer = IntervalTimer();*/
+#if defined(PARTICLE)
+    __timer = IntervalTimer();
+    __output = DacSoundOutput();
+#else
+    // TODO: Boost timer
+    __output = FileSoundOutput();
+#endif
 }
 
 Synth::~Synth() {
