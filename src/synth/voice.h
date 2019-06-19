@@ -3,13 +3,15 @@
 
 #pragma once
 
+#include "oscillator.h"
+
 typedef enum {
 	ATTACK  = 0,
 	DECAY   = 1,
 	SUSTAIN = 2,
 	RELEASE = 3,
 	IDLE    = 4
-} AdsrState;
+} ADSRState;
 
 typedef enum {
 	TEST     = 0,
@@ -36,12 +38,14 @@ class Voice {
 		virtual ~Voice();
 
 		void setWaveform(Waveform waveform);
-        void setFrequency(int frequency);
-        void setPulseWidth(int pulseWidth);
-        void setAdsr(int attack, int decay, int sustain, int release);
+        void setFrequency(uint16_t frequency);
+        void setPulseWidth(uint16_t pulseWidth);
+        void setADSR(uint16_t attack, uint16_t decay, uint16_t sustain, uint16_t release);
         // Set to true for Attack/Decay/Sustain cycle and false for Release cycle
         void setGate(bool gate);
         void setChannel(Channel channel);
+	private:
+		Oscillator oscillator;
 };
 
 #endif /* VOICE_H_ */

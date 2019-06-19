@@ -3,6 +3,8 @@
 *.gch
 .idea
 build
+target
+.vscode/ipch
 # CMake
 CMakeCache.txt
 CMakeFiles

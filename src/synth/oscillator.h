@@ -1,6 +1,11 @@
 #ifndef OSCILLATOR_H
 #define OSCILLATOR_H
 
+#pragma once
+
+#define AMPLITUDE ((1<<15)-1)
+#define WAVE_TABLE_SIZE 256
+
 class Oscillator {
     public:
         Oscillator();

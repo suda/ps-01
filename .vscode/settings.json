@@ -1,0 +1,6 @@
+{
+    "particle.firmwareVersion": "1.2.1-rc.2",
+    "cortex-debug.openocdPath": "/Users/particle/.particle/toolchains/openocd/0.10.0-particle.1/bin/openocd",
+    "particle.targetPlatform": "argon",
+    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core"
+}
