@@ -8,9 +8,11 @@
 
 // Photon DAC sound output
 class DacSoundOutput : SoundOutput {
-    public:
-        DacSoundOutput();
-        virtual ~DacSoundOutput();
+public:
+  DacSoundOutput();
+  virtual ~DacSoundOutput();
+
+  void setChannelValues(int16_t left, int16_t right);
 };
 
-#endif //DAC_SOUND_OUTPUT_H
+#endif // DAC_SOUND_OUTPUT_H

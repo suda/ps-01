@@ -2,6 +2,7 @@
 *_firmware_*
 *.gch
 .idea
+build
 # CMake
 CMakeCache.txt
 CMakeFiles
