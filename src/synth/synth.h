@@ -12,8 +12,8 @@
 
 #include "voice.h"
 
-#define SAMPLERATE_HZ 44100
-#define BUFF_SIZE 1024
+#define BUFF_SIZE      1024
+#define VOICES_COUNT   3
 
 #define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 30))
 #define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 31))
@@ -27,19 +27,30 @@ public:
   }
   void begin();
 
-  Voice getVoice(int voiceNumber);
+  Voice voices[VOICES_COUNT];
+  void debug();
 protected:
   Synth();
 private:
-  void setupSoundOutput();
   int16_t bufferA[BUFF_SIZE*2] = {};
   int16_t bufferB[BUFF_SIZE*2] = {};
-  nrfx_i2s_buffers_t i2sBuffersA;
-  nrfx_i2s_buffers_t i2sBuffersB;
-  bool usingSecondBuffer;
+  // Which buffer is currently used by the DMA?
+  bool usingSecondBuffer = false;
 
+  void setupSoundOutput();
+  // I2S specific definitions
+  nrfx_i2s_buffers_t i2sBuffersA = {
+      .p_rx_buffer = 0,
+      .p_tx_buffer = 0
+  };
+  nrfx_i2s_buffers_t i2sBuffersB = {
+      .p_rx_buffer = 0,
+      .p_tx_buffer = 0
+  };
   void dataHandler(uint32_t status);
   static void dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status);
+
+  void fillBuffer();
 };
 
 #endif /* SYNTH_H_ */
