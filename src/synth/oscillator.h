@@ -7,11 +7,13 @@
 #include "Particle.h"
 #endif
 
+#include <limits>
 #include "types.h"
+#include "../vendor/frannor.h"
 
 #define SAMPLERATE_HZ   44100
-// #define AMPLITUDE       ((1<<15)-1)
-#define AMPLITUDE       ((1<<12)-1)
+#define AMPLITUDE       ((1<<15)-1)
+// #define AMPLITUDE       ((1<<12)-1)
 #define WAVE_TABLE_SIZE 256
 
 class Oscillator {
@@ -20,7 +22,7 @@ class Oscillator {
 
         void setWaveform(Waveform waveform);
         void setFrequency(float frequency);
-        void setPulseWidth(int8_t pulseWidth);
+        void setPulseWidth(uint16_t pulseWidth);
         int16_t getSample();
         void clock();
         void debug();
@@ -28,11 +30,14 @@ class Oscillator {
         uint64_t _clock = 0;
         Waveform _waveform;
         float _frequency = 0;
+        uint16_t _pulseWidth = (1 << 8) - 1;
         int16_t triangleWave[WAVE_TABLE_SIZE] = {0};
         int16_t sawtoothWave[WAVE_TABLE_SIZE] = {0};
+        int16_t pulseWave[WAVE_TABLE_SIZE] = {0};
 
         void generateTriangleWave();
         void generateSawtoothWave();
+        void generatePulseWave();
 };
 
 #endif //OSCILLATOR_H

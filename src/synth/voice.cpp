@@ -10,6 +10,10 @@ void Voice::setFrequency(float frequency) {
     oscillator.setFrequency(frequency);
 }
 
+void Voice::setPulseWidth(uint16_t pulseWidth) {
+    oscillator.setPulseWidth(pulseWidth);
+}
+
 int16_t Voice::getSample() {
     return oscillator.getSample();
 }
