@@ -11,11 +11,6 @@
 #include "types.h"
 #include "../vendor/frannor.h"
 
-#define SAMPLERATE_HZ   44100
-#define AMPLITUDE       ((1<<15)-1)
-// #define AMPLITUDE       ((1<<12)-1)
-#define WAVE_TABLE_SIZE 256
-
 class Oscillator {
     public:
         Oscillator();

@@ -21,12 +21,14 @@ class Voice {
         // Set to true for Attack/Decay/Sustain cycle and false for Release cycle
         void setGate(bool gate);
         void setChannel(Channel channel);
+        bool isAudibleInChannel(Channel channel);
         int16_t getSample();
         void clock();
         void debug();
     private:
         Oscillator oscillator;
         uint64_t _clock = 0;
+        Channel _channel = CH_BOTH;
 };
 
 #endif /* VOICE_H_ */

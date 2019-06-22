@@ -8,16 +8,13 @@
 #undef SCK
 #include "nrf_gpio.h"
 #include <nrfx_i2s.h>
-#endif
-
-#include "voice.h"
-
-#define BUFF_SIZE      1024
-#define VOICES_COUNT   3
 
 #define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 30))
 #define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 31))
 #define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(1, 15))
+#endif
+
+#include "voice.h"
 
 class Synth {
 public:
@@ -51,6 +48,7 @@ private:
   static void dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status);
 
   void fillBuffer();
+  int16_t getChannelSample(Channel channel);
 };
 
 #endif /* SYNTH_H_ */

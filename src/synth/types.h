@@ -4,11 +4,11 @@
 #pragma once
 
 typedef enum {
-    ATTACK  = 0,
-    DECAY   = 1,
-    SUSTAIN = 2,
-    RELEASE = 3,
-    IDLE    = 4
+    ADSR_ATTACK  = 0,
+    ADSR_DECAY   = 1,
+    ADSR_SUSTAIN = 2,
+    ADSR_RELEASE = 3,
+    ADSR_IDLE    = 4
 } ADSRState;
 
 typedef enum {
@@ -21,9 +21,16 @@ typedef enum {
 } Waveform;
 
 typedef enum {
-    BOTH  = 0,
-    LEFT  = 1,
-    RIGHT = 2
+    CH_LEFT  = 1,
+    CH_RIGHT = 2,
+    CH_BOTH  = 3
 } Channel;
+
+#define BUFF_SIZE       1024
+#define VOICES_COUNT    3
+#define SAMPLERATE_HZ   44100
+#define AMPLITUDE       ((1<<15)-1)
+// #define AMPLITUDE       ((1<<12)-1)
+#define WAVE_TABLE_SIZE 256
 
 #endif /* TYPES_H_ */

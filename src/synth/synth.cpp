@@ -46,24 +46,39 @@ void Synth::dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status)
     auto self = Synth::instance();
     self->dataHandler(status);
 }
-uint16_t c = 0;
+
 void Synth::fillBuffer() {
     for (uint16_t i = 0; i < BUFF_SIZE; i++) {
-        int16_t sample = voices[0].getSample();
-
+        // Fill the correct buffer with correct channels
         if (usingSecondBuffer) {
-            bufferA[i*2] = sample;
-            bufferA[i*2+1] = sample;
+            bufferA[i*2] = getChannelSample(CH_LEFT);
+            bufferA[i*2+1] = getChannelSample(CH_RIGHT);
         } else {
-            bufferB[i*2] = sample;
-            bufferB[i*2+1] = sample;
+            bufferB[i*2] = getChannelSample(CH_LEFT);
+            bufferB[i*2+1] = getChannelSample(CH_RIGHT);
         }
-        voices[0].clock();
-        c++;
+        // Clock all the voices
+        for (uint8_t j = 0; j < VOICES_COUNT; j++) {
+            voices[j].clock();
+        }
     }
 }
 
+int16_t Synth::getChannelSample(Channel channel) {
+    int16_t sample = 0;
+    for (uint8_t i = 0; i < VOICES_COUNT; i++) {
+        if (voices[i].isAudibleInChannel(channel)) {
+            int16_t _voiceSample = voices[i].getSample();
+            // Trim sample to maximum volume
+            sample = sample + _voiceSample > AMPLITUDE
+                ? AMPLITUDE : sample + _voiceSample;
+        }
+    }
+    return sample;
+}
+
 void Synth::debug() {
-    voices[0].setFrequency(493.88);
-    voices[0].debug();
+    for (uint8_t i = 0; i < VOICES_COUNT; i++) {
+        voices[i].debug();
+    }
 }
