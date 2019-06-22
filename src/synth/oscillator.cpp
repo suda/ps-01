@@ -47,12 +47,12 @@ void Oscillator::setPulseWidth(uint16_t pulseWidth) {
 
 void Oscillator::generateTriangleWave() {
     float delta = float(AMPLITUDE)/float(WAVE_TABLE_SIZE);
-    for (int i=0; i<WAVE_TABLE_SIZE/2; ++i) { 
-        triangleWave[i] = -(AMPLITUDE/2)+delta*i;
+    for (int i=0; i<WAVE_TABLE_SIZE/2; ++i) {
+        triangleWave[i] = -(AMPLITUDE/2)+delta*(i*2); 
     }
-    for (int i=WAVE_TABLE_SIZE/2; i<WAVE_TABLE_SIZE; ++i) { 
-        triangleWave[i] = (AMPLITUDE/2)-delta*(i-WAVE_TABLE_SIZE/2);
-    } 
+    for (int i=0; i<WAVE_TABLE_SIZE/2; ++i) {
+        triangleWave[(WAVE_TABLE_SIZE/2)+i] = (AMPLITUDE/2)-delta*(i*2); 
+    }
 }
 
 void Oscillator::generateSawtoothWave() {
@@ -64,30 +64,7 @@ void Oscillator::generateSawtoothWave() {
 
 void Oscillator::generatePulseWave() {
     for (int i=0; i<WAVE_TABLE_SIZE; ++i) {
-        pulseWave[i] = i * float((1 << 16) / WAVE_TABLE_SIZE) <= _pulseWidth ? AMPLITUDE : 0;
-    }
-    int rows = 16;
-    for (int i=0; i<WAVE_TABLE_SIZE/rows; ++i) {
-#ifdef PARTICLE
-        Log.trace("%-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i",
-            pulseWave[rows*i],
-            pulseWave[rows*i+1],
-            pulseWave[rows*i+2],
-            pulseWave[rows*i+3],
-            pulseWave[rows*i+4],
-            pulseWave[rows*i+5],
-            pulseWave[rows*i+6],
-            pulseWave[rows*i+7],
-            pulseWave[rows*i+8],
-            pulseWave[rows*i+9],
-            pulseWave[rows*i+10],
-            pulseWave[rows*i+11],
-            pulseWave[rows*i+12],
-            pulseWave[rows*i+13],
-            pulseWave[rows*i+14],
-            pulseWave[rows*i+15]
-        );
-#endif
+        pulseWave[i] = float(_pulseWidth) / float(WAVE_TABLE_SIZE) / 2 > i ? AMPLITUDE / 2 : -(AMPLITUDE / 2);
     }
 }
 
