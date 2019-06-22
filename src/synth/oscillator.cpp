@@ -68,6 +68,7 @@ void Oscillator::generatePulseWave() {
     }
     int rows = 16;
     for (int i=0; i<WAVE_TABLE_SIZE/rows; ++i) {
+#ifdef PARTICLE
         Log.trace("%-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i %-5i",
             pulseWave[rows*i],
             pulseWave[rows*i+1],
@@ -86,9 +87,12 @@ void Oscillator::generatePulseWave() {
             pulseWave[rows*i+14],
             pulseWave[rows*i+15]
         );
+#endif
     }
 }
 
 void Oscillator::debug() {
+#ifdef PARTICLE
     Log.trace("Clock: %d Sample: %d Freq: %f", _clock, getSample(), _frequency);
+#endif
 }

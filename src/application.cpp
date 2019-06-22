@@ -1,14 +1,23 @@
 #if defined(PARTICLE)
 #include "Particle.h"
 SYSTEM_MODE(MANUAL);
+SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
+#else
+#include <stdio.h>
 #endif
 
 #include "synth/synth.h"
 
-SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
+#ifndef PARTICLE
+int main(int argc, char **argv) {
+    printf("ps-01\n");
+}
+#endif
 
 void setup() {
+#if defined(PARTICLE)
     waitUntil(Serial.isConnected);
+#endif
     Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
     Synth::instance()->begin();
 }
@@ -30,9 +39,9 @@ void loop() {
     Synth::instance()->voices[0].setWaveform(WF_PULSE);
     Synth::instance()->voices[0].setFrequency(C4_HZ);
     for (int16_t i = 0; i < (1 << 8); i+=8) {
-        Log.trace("Fill %i%% %i", float(i / (1 << 8) * 100), i);
+        // Log.trace("Fill %i%% %i", float(i / (1 << 8) * 100), i);
         Synth::instance()->voices[0].setPulseWidth(i);
-        delay(1000);
+        // delay(1000);
     }
 }
 #endif

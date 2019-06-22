@@ -35,6 +35,7 @@ private:
   bool usingSecondBuffer = false;
 
   void setupSoundOutput();
+#if defined(PARTICLE)
   // I2S specific definitions
   nrfx_i2s_buffers_t i2sBuffersA = {
       .p_rx_buffer = 0,
@@ -46,6 +47,7 @@ private:
   };
   void dataHandler(uint32_t status);
   static void dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status);
+#endif
 
   void fillBuffer();
   int16_t getChannelSample(Channel channel);

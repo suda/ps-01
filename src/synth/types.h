@@ -33,4 +33,8 @@ typedef enum {
 // #define AMPLITUDE       ((1<<12)-1)
 #define WAVE_TABLE_SIZE 256
 
+#ifndef PARTICLE
+#include <stdint.h>
+#endif
+
 #endif /* TYPES_H_ */

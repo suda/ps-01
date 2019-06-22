@@ -9,6 +9,7 @@ void Synth::begin() {
 }
 
 void Synth::setupSoundOutput() {
+#ifdef PARTICLE
     attachInterruptDirect(I2S_IRQn, nrfx_i2s_irq_handler);
 
     nrfx_i2s_config_t const config = {
@@ -32,8 +33,10 @@ void Synth::setupSoundOutput() {
 
     nrfx_i2s_init(&config, dataHandlerCb);
     nrfx_i2s_start(&i2sBuffersA, sizeof(bufferA) / sizeof(uint32_t), 0);
+#endif
 }
 
+#ifdef PARTICLE
 void Synth::dataHandler(uint32_t status) {
     if (status == NRFX_I2S_STATUS_NEXT_BUFFERS_NEEDED) {
         nrfx_i2s_next_buffers_set(usingSecondBuffer ? &i2sBuffersB : &i2sBuffersA);
@@ -46,6 +49,7 @@ void Synth::dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status)
     auto self = Synth::instance();
     self->dataHandler(status);
 }
+#endif
 
 void Synth::fillBuffer() {
     for (uint16_t i = 0; i < BUFF_SIZE; i++) {
