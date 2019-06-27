@@ -1,20 +1,34 @@
 #ifndef ADSR_H
 #define ADSR_H
 
+#pragma once
+
+#if defined(PARTICLE)
+#include "Particle.h"
+#endif
+
+#include "types.h"
+
 class ADSR {
     public:
         ADSR();
-        ~ADSR();
 
-        void setAttack(int8_t attack);
-        void setDecay(int8_t decay);
-        void setSustain(int8_t sustain);
-        void setRelease(int8_t release);
+        void setAttack(uint16_t attack);
+        void setDecay(uint16_t decay);
+        void setSustain(uint8_t sustain);
+        void setRelease(uint16_t release);
         void setGate(bool gate);
-        // Increase the ADSR clock by delta
-        void clock(int16_t delta);
+        void clock();
         // Apply ADSR and return the sample
         int16_t apply(int16_t sample);
+    private:
+        uint16_t _attack;
+        uint16_t _decay;
+        uint8_t _sustain;
+        uint16_t _release;
+        uint64_t _clock = 0;
+        bool _gate = false;
+        ADSRState _state = ADSR_IDLE;
 };
 
 #endif //ADSR_H

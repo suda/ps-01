@@ -7,7 +7,6 @@
 #include "Particle.h"
 #endif
 
-#include <limits>
 #include "types.h"
 #include "../vendor/frannor.h"
 

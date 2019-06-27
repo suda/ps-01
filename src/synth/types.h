@@ -4,11 +4,11 @@
 #pragma once
 
 typedef enum {
-    ADSR_ATTACK  = 0,
-    ADSR_DECAY   = 1,
-    ADSR_SUSTAIN = 2,
-    ADSR_RELEASE = 3,
-    ADSR_IDLE    = 4
+    ADSR_IDLE    = 0,
+    ADSR_ATTACK  = 1,
+    ADSR_DECAY   = 2,
+    ADSR_SUSTAIN = 3,
+    ADSR_RELEASE = 4
 } ADSRState;
 
 typedef enum {
@@ -29,6 +29,8 @@ typedef enum {
 #define BUFFER_SIZE     1024
 #define VOICES_COUNT    3
 #define SAMPLERATE_HZ   44100
+// Number of clock cycles for one milisecond
+#define ONE_MS          SAMPLERATE_HZ / 1000
 #define AMPLITUDE       ((1<<16)-1)
 // #define AMPLITUDE       ((1<<12)-1)
 #define WAVE_TABLE_SIZE 256

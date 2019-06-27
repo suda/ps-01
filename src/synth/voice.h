@@ -4,6 +4,7 @@
 #pragma once
 
 #include "oscillator.h"
+#include "adsr.h"
 #include "types.h"
 
 /**
@@ -17,7 +18,7 @@ class Voice {
         void setWaveform(Waveform waveform);
         void setFrequency(float frequency);
         void setPulseWidth(uint16_t pulseWidth);
-        void setADSR(uint16_t attack, uint16_t decay, uint16_t sustain, uint16_t release);
+        void setADSR(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release);
         // Set to true for Attack/Decay/Sustain cycle and false for Release cycle
         void setGate(bool gate);
         void setChannel(Channel channel);
@@ -27,6 +28,7 @@ class Voice {
         void debug();
     private:
         Oscillator oscillator;
+        ADSR adsr;
         uint64_t _clock = 0;
         Channel _channel = CH_BOTH;
 };

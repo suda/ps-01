@@ -14,6 +14,17 @@ void Voice::setPulseWidth(uint16_t pulseWidth) {
     oscillator.setPulseWidth(pulseWidth);
 }
 
+void Voice::setADSR(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release) {
+    adsr.setAttack(attack);
+    adsr.setDecay(decay);
+    adsr.setSustain(sustain);
+    adsr.setRelease(release);
+}
+
+void Voice::setGate(bool gate) {
+    adsr.setGate(gate);
+}
+
 void Voice::setChannel(Channel channel) {
     _channel = channel;
 }
@@ -23,12 +34,15 @@ bool Voice::isAudibleInChannel(Channel channel) {
 }
 
 int16_t Voice::getSample() {
-    return oscillator.getSample();
+    int16_t sample = oscillator.getSample();
+    sample = adsr.apply(sample);
+    return sample;
 }
 
 void Voice::clock() {
     _clock++;
     oscillator.clock();
+    adsr.clock();
 }
 
 void Voice::debug() {
