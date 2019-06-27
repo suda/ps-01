@@ -12,6 +12,10 @@
 #define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 30))
 #define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 31))
 #define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(1, 15))
+#else
+#include <stdio.h>
+#include <string.h>
+#include <SDL.h>
 #endif
 
 #include "voice.h"
@@ -26,11 +30,14 @@ public:
 
   Voice voices[VOICES_COUNT];
   void debug();
+#ifndef PARTICLE
+  void playBuffer();
+#endif
 protected:
   Synth();
 private:
-  int16_t bufferA[BUFF_SIZE*2] = {};
-  int16_t bufferB[BUFF_SIZE*2] = {};
+  int16_t bufferA[BUFFER_SIZE*2] = {};
+  int16_t bufferB[BUFFER_SIZE*2] = {};
   // Which buffer is currently used by the DMA?
   bool usingSecondBuffer = false;
 
@@ -47,6 +54,9 @@ private:
   };
   void dataHandler(uint32_t status);
   static void dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status);
+#else
+  FILE *writehandle = NULL;
+  static void audioCallback(void *userdata, Uint8 *stream, int len);
 #endif
 
   void fillBuffer();

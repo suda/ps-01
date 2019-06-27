@@ -6,6 +6,9 @@ Synth::Synth() {
 void Synth::begin() {
     voices[0].setFrequency(440.0);
     setupSoundOutput();
+#ifndef PARTICLE
+    writehandle = fopen("audio.raw", "wb");
+#endif
 }
 
 void Synth::setupSoundOutput() {
@@ -33,6 +36,24 @@ void Synth::setupSoundOutput() {
 
     nrfx_i2s_init(&config, dataHandlerCb);
     nrfx_i2s_start(&i2sBuffersA, sizeof(bufferA) / sizeof(uint32_t), 0);
+#else
+    SDL_AudioSpec wanted;
+    // extern void fill_audio(void *udata, Uint8 *stream, int len);
+
+    /* Set the audio format */
+    wanted.freq = SAMPLERATE_HZ;
+    wanted.format = AUDIO_S16;
+    wanted.channels = 2;    /* 1 = mono, 2 = stereo */
+    wanted.samples = BUFFER_SIZE;
+    wanted.callback = audioCallback;
+    wanted.userdata = NULL;
+
+    /* Open the audio device, forcing the desired format */
+    if ( SDL_OpenAudio(&wanted, NULL) < 0 ) {
+        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+    }
+
+    SDL_PauseAudio(0);
 #endif
 }
 
@@ -49,10 +70,17 @@ void Synth::dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status)
     auto self = Synth::instance();
     self->dataHandler(status);
 }
+#else
+void Synth::audioCallback(void *userdata, Uint8 *stream, int len) {
+    auto self = Synth::instance();
+    self->fillBuffer();
+    // SDL_MixAudio(stream, (Uint8 *)&self->bufferB, len, SDL_MIX_MAXVOLUME);
+    SDL_memcpy (stream, (Uint8 *)&self->bufferB, len);
+}
 #endif
 
 void Synth::fillBuffer() {
-    for (uint16_t i = 0; i < BUFF_SIZE; i++) {
+    for (uint16_t i = 0; i < BUFFER_SIZE; i++) {
         // Fill the correct buffer with correct channels
         if (usingSecondBuffer) {
             bufferA[i*2] = getChannelSample(CH_LEFT);
@@ -66,6 +94,11 @@ void Synth::fillBuffer() {
             voices[j].clock();
         }
     }
+#ifndef PARTICLE
+    fwrite(
+        usingSecondBuffer ? bufferA : bufferB,
+        BUFFER_SIZE * sizeof(int16_t), 1, writehandle);
+#endif
 }
 
 int16_t Synth::getChannelSample(Channel channel) {

@@ -26,12 +26,21 @@ typedef enum {
     CH_BOTH  = 3
 } Channel;
 
-#define BUFF_SIZE       1024
+#define BUFFER_SIZE     1024
 #define VOICES_COUNT    3
 #define SAMPLERATE_HZ   44100
-#define AMPLITUDE       ((1<<15)-1)
+#define AMPLITUDE       ((1<<16)-1)
 // #define AMPLITUDE       ((1<<12)-1)
 #define WAVE_TABLE_SIZE 256
+
+#define C4_HZ 261.63
+#define D4_HZ 293.66
+#define E4_HZ 329.63
+#define F4_HZ 349.23
+#define G4_HZ 392.00
+#define A4_HZ 440.00
+#define B4_HZ 493.88
+#define C5_HZ 523.25
 
 #ifndef PARTICLE
 #include <stdint.h>

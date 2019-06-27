@@ -4,35 +4,26 @@ SYSTEM_MODE(MANUAL);
 SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
 #else
 #include <stdio.h>
+#include <string.h>
+#define delay(x) SDL_Delay(x)
 #endif
 
 #include "synth/synth.h"
-
-#ifndef PARTICLE
-int main(int argc, char **argv) {
-    printf("ps-01\n");
-}
-#endif
 
 void setup() {
 #if defined(PARTICLE)
     waitUntil(Serial.isConnected);
 #endif
-    Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
+    // Synth::instance()->voices[0].setWaveform(WF_PULSE);
+    // Synth::instance()->voices[0].setFrequency(C4_HZ);
+    Synth::instance()->voices[1].setWaveform(WF_TRIANGLE);
+    Synth::instance()->voices[1].setFrequency(C4_HZ);
     Synth::instance()->begin();
 }
 
-#define C4_HZ 261.63
-#define D4_HZ 293.66
-#define E4_HZ 329.63
-#define F4_HZ 349.23
-#define G4_HZ 392.00
-#define A4_HZ 440.00
-#define B4_HZ 493.88
-#define C5_HZ 523.25
-
-// #define SCALE
-#define PWM
+#define SCALE
+// #define PWM
+// void loop() {}
 
 #ifdef PWM
 void loop() {
@@ -40,8 +31,9 @@ void loop() {
     Synth::instance()->voices[0].setFrequency(C4_HZ);
     for (int16_t i = 0; i < (1 << 8); i+=8) {
         // Log.trace("Fill %i%% %i", float(i / (1 << 8) * 100), i);
+        printf("Fill %f%% %i", float(i / (1 << 8) * 100), i);
         Synth::instance()->voices[0].setPulseWidth(i);
-        // delay(1000);
+        delay(1000);
     }
 }
 #endif
@@ -72,6 +64,18 @@ void loop() {
     for (int i=0; i<sizeof(scale)/sizeof(float); ++i) {
         Synth::instance()->voices[0].setFrequency(scale[i]);
         delay(500);
+    }
+}
+#endif
+
+#ifndef PARTICLE
+int main(int argc, char **argv) {
+    printf("ps-01\n");
+    
+    setup();
+
+    while (1) {
+        loop();
     }
 }
 #endif

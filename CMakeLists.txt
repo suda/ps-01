@@ -10,5 +10,9 @@ list(APPEND
     SOURCE_FILES
     src/application.cpp)
 
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+
 add_executable(ps_01 ${SOURCE_FILES})
-target_link_libraries(ps_01 ${Boost_LIBRARIES})
+
+target_link_libraries(ps_01 ${SDL2_LIBRARIES})
