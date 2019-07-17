@@ -27,8 +27,8 @@ void Synth::setupSoundOutput() {
         .alignment = NRF_I2S_ALIGN_LEFT,
         .sample_width = NRF_I2S_SWIDTH_16BIT,
         .channels = NRF_I2S_CHANNELS_STEREO,
-        .mck_setup = NRF_I2S_MCK_32MDIV11,
-        .ratio = NRF_I2S_RATIO_64X
+        .mck_setup = I2S_MCK,
+        .ratio = I2S_RATIO
     };
 
     i2sBuffersA.p_tx_buffer = (uint32_t*)bufferA;

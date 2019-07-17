@@ -8,10 +8,6 @@
 #undef SCK
 #include "nrf_gpio.h"
 #include <nrfx_i2s.h>
-
-#define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 30))
-#define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 31))
-#define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(1, 15))
 #else
 #include <stdio.h>
 #include <string.h>
