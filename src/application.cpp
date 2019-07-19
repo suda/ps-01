@@ -104,6 +104,7 @@ void loop() {
 float scale[] = { C4_HZ, C4S_HZ, D4_HZ, D4S_HZ, E4_HZ, F4_HZ, F4S_HZ, G4_HZ, G4S_HZ, A4_HZ, A4S_HZ, B4_HZ };
 
 void loop() {
+#if defined(PARTICLE)
     delay(30);
     if (trellis.readSwitches()) {
         bool keyChanged = false;
@@ -125,6 +126,7 @@ void loop() {
             trellis.writeDisplay();
         }
     }
+#endif
 }
 #endif
 

@@ -14,5 +14,6 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(ps_01 ${SOURCE_FILES})
+set_target_properties(ps_01 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build")
 
 target_link_libraries(ps_01 ${SDL2_LIBRARIES})
