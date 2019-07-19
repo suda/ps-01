@@ -1,6 +1,8 @@
 #include "adsr.h"
 
-ADSR::ADSR() {}
+ADSR::ADSR() {
+    _oneMSf = float(ONE_MS);
+}
 
 void ADSR::setAttack(uint16_t attack) {
     _attack = attack;
@@ -8,14 +10,20 @@ void ADSR::setAttack(uint16_t attack) {
 
 void ADSR::setDecay(uint16_t decay) {
     _decay = decay;
+    _decayf = float(_decay);
+    _decayOneMSf = _decayf * ONE_MS;
 }
 
 void ADSR::setSustain(uint8_t sustain) {
     _sustain = sustain;
+    _sustainf = float(_sustain) / float((1 << 8) - 1);
+    _sustainInvf = 1.0f - _sustainf;
 }
 
 void ADSR::setRelease(uint16_t release) {
     _release = release;
+    _releasef = float(release);
+    _releaseOneMSf = _releasef * ONE_MS;
 }
 
 void ADSR::setGate(bool gate) {
@@ -52,22 +60,23 @@ void ADSR::clock() {
 }
 
 int16_t ADSR::apply(int16_t sample) {
-    float sustainValue = float(_sustain) / float((1 << 8) - 1);
     switch (_state) {
         case ADSR_ATTACK:
-            sample *= float(_clock) / float(_attack) / float(ONE_MS);
+            sample *= float(_clock) / float(_attack) / _oneMSf;
             break;
         case ADSR_DECAY:
-            sample *= (1.0f - sustainValue) * float((_decay * ONE_MS) - _clock) / float(_decay) / float(ONE_MS) + sustainValue;
+            sample *= _sustainInvf * (_decayOneMSf - _clock) / _decayf / _oneMSf + _sustainf;
             break;
         case ADSR_SUSTAIN:
-            sample *= sustainValue;
+            sample *= _sustainf;
             break;
         case ADSR_RELEASE:
-            sample *= sustainValue * float((_release * ONE_MS) - _clock) / float(_release) / float(ONE_MS);
+            sample *= _sustainf * (_releaseOneMSf - _clock) / _releasef / _oneMSf;
             break;
         default:
             return 0;
     }
     return sample;
 }
+
+void ADSR::debug() {}
