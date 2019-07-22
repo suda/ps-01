@@ -2,7 +2,21 @@
 
 [![Build Status](https://travis-ci.org/suda/ps-01.svg?branch=master)](https://travis-ci.org/suda/ps-01)
 
-Particle Photon based chiptune synthesizer.
+Software synthesizer running on Particle Xenon, inspired by MOS6581 and Pocket Operator.
+
+## Abstract
+
+[See planned milestones and features](docs/ps-01.pdf).
+
+### Hardware
+
+This is a tentative list of components used in this build:
+
+* [Particle 3rd gen device (Argon/Boron/Xenon)](https://store.particle.io/collections/bluetooth)
+* [Adafruit I2S Stereo Decoder](https://www.adafruit.com/product/3678)
+* 128x64 monochrome LCD compatible with [u8g2 library](https://github.com/olikraus/u8g2/wiki/u8g2setupcpp#constructor-reference)
+* four rotary encoders with switches
+* [MAX3421E based USB host controller](https://www.aliexpress.com/item/32735946108.html)
 
 ## Code architecture
 
