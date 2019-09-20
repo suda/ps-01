@@ -80,6 +80,10 @@ typedef enum {
 #define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 28)) // A2
 #define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 3)) // A0
 #define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(0, 4)) // A1
+
+#define ENCODER_INT_PIN D2
+
+#define KEYPAD_INT_PIN  D3
 #else
 #include <stdint.h>
 #endif
@@ -97,5 +101,10 @@ typedef enum {
 #define A4S_HZ 466.16
 #define B4_HZ  493.88
 #define C5_HZ  523.25
+
+#define BIT_SET(a, b) ((a) |= (1ULL<<(b)))
+#define BIT_CLEAR(a, b) ((a) &= ~(1ULL<<(b)))
+#define BIT_FLIP(a, b) ((a) ^= (1ULL<<(b)))
+#define BIT_CHECK(a, b) (!!((a) & (1ULL<<(b)))) 
 
 #endif /* TYPES_H_ */
