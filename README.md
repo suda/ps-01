@@ -14,9 +14,13 @@ This is a tentative list of components used in this build:
 
 * [Particle 3rd gen device (Argon/Boron/Xenon)](https://store.particle.io/collections/bluetooth)
 * [Adafruit I2S Stereo Decoder](https://www.adafruit.com/product/3678)
-* 128x64 monochrome LCD compatible with [u8g2 library](https://github.com/olikraus/u8g2/wiki/u8g2setupcpp#constructor-reference)
-* four rotary encoders with switches
+* 320x240 TFT LCD compatible with [ucglib library](https://github.com/olikraus/ucglib)
+* four rotary encoders with switches driven by [PCF8574](https://www.ti.com/lit/ds/symlink/pcf8574.pdf)
+* [Adafruit Trellis](https://www.adafruit.com/product/1616) keypad
 * [MAX3421E based USB host controller](https://www.aliexpress.com/item/32735946108.html)
+
+#### Circuit diagram
+![](docs/diagram.png)
 
 ## Code architecture
 
