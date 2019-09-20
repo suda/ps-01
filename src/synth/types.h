@@ -77,9 +77,9 @@ typedef enum {
 #define WAVE_TABLE_SIZE 256
 
 #ifdef PARTICLE
-#define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 30))
-#define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 31))
-#define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(1, 15))
+#define I2S_PIN_SCK    (NRF_GPIO_PIN_MAP(0, 28)) // A2
+#define I2S_PIN_LRCK   (NRF_GPIO_PIN_MAP(0, 3)) // A0
+#define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(0, 4)) // A1
 #else
 #include <stdint.h>
 #endif
