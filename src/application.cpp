@@ -305,6 +305,12 @@ void loop() {
         calculateKnobPosition(2, input.p4, input.p5, 4);
         calculateKnobPosition(3, input.p6, input.p7, 8);
 
+        // Bound to min/max
+        position[0] = max(min(position[0], 2 << 16), 0);
+        position[1] = max(min(position[1], 2 << 16), 0);
+        position[2] = max(min(position[2], 2 << 8), 0);
+        position[3] = max(min(position[3], 2 << 16), 0);
+
         Serial.printf(
             "Attack:%4d | Decay:%4d | Sustain:%4d | Release:%4d\r",
             position[0],
@@ -312,13 +318,15 @@ void loop() {
             position[2],
             position[3]
         );
-        position[0] = max(min(position[0], 2 << 16), 0);
-        position[1] = max(min(position[1], 2 << 16), 0);
-        position[2] = max(min(position[2], 2 << 8), 0);
-        position[3] = max(min(position[3], 2 << 16), 0);
+        
         Synth::instance()->voices[0].setADSR(position[0], position[1], position[2], position[3]);
-        drawKnobPositions(position[0], position[1], position[2], position[3]);
+        // drawKnobPositions(position[0], position[1], position[2], position[3]);
         encoderUpdated = false;
+    }
+
+    // The encoder flag is still set. Try pulling again
+    if (digitalRead(ENCODER_INT_PIN) == LOW) {
+        encoderUpdated = true;
     }
 #endif
 }
