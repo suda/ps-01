@@ -26,6 +26,11 @@ uint16_t state[4] = {0, 0, 0, 0};
 int32_t lastPosition[4] = {0, 0, 0, 0};
 bool encoderUpdated = false;
 
+// Buttons
+void buttonInterrupt();
+PCF8574 buttons(0x21, BUTTON_INT_PIN, buttonInterrupt);
+bool buttonUpdated = false;
+
 // TFT
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
 #else
@@ -44,20 +49,24 @@ void keypadInterrupt() {
     keypadUpdated = true;
 }
 
-void setupEncoders() {
-    encoders.pinMode(P0, INPUT);
-    encoders.pinMode(P1, INPUT);
-    encoders.pinMode(P2, INPUT);
-    encoders.pinMode(P3, INPUT);
-    encoders.pinMode(P4, INPUT);
-    encoders.pinMode(P5, INPUT);
-    encoders.pinMode(P6, INPUT);
-    encoders.pinMode(P7, INPUT);
-    encoders.begin();
+void setupPCF(PCF8574 *pcf) {
+    pcf->pinMode(P0, INPUT);
+    pcf->pinMode(P1, INPUT);
+    pcf->pinMode(P2, INPUT);
+    pcf->pinMode(P3, INPUT);
+    pcf->pinMode(P4, INPUT);
+    pcf->pinMode(P5, INPUT);
+    pcf->pinMode(P6, INPUT);
+    pcf->pinMode(P7, INPUT);
+    pcf->begin();
 }
 
 void encoderInterrupt() {
     encoderUpdated = true;
+}
+
+void buttonInterrupt() {
+    buttonUpdated = true;
 }
 
 void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t step=1) {
@@ -196,7 +205,8 @@ void setup() {
     attachInterrupt(KEYPAD_INT_PIN, keypadInterrupt, CHANGE);
     trellis.begin(0x70);
 
-    setupEncoders();
+    setupPCF(&encoders);
+    setupPCF(&buttons);
 
     tft.begin();
     clearScreen();
@@ -357,6 +367,19 @@ void loop() {
     // The encoder flag is still set. Try pulling again
     if (digitalRead(ENCODER_INT_PIN) == LOW) {
         encoderUpdated = true;
+    }
+
+    if (buttonUpdated) {
+        PCF8574::DigitalInput input = buttons.digitalReadAll();
+        Serial.printf("Buttons: %d %d %d %d %d %d %d %d\r", 
+            input.p0, input.p1, input.p2, input.p3,
+            input.p4, input.p5, input.p6, input.p7);
+        buttonUpdated = false;
+    }
+
+    // The button flag is still set. Try pulling again
+    if (digitalRead(BUTTON_INT_PIN) == LOW) {
+        buttonUpdated = true;
     }
 #endif
 }
