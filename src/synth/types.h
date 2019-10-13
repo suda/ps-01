@@ -84,6 +84,13 @@ typedef enum {
 #define ENCODER_INT_PIN D2
 
 #define KEYPAD_INT_PIN  D3
+
+#define TFT_DC A3
+#define TFT_CS A5
+#define TFT_MOSI MOSI
+#define TFT_CLK SCK
+#define TFT_RST A4
+#define TFT_MISO MISO
 #else
 #include <stdint.h>
 #endif

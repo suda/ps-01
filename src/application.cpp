@@ -4,11 +4,14 @@
 #if defined(PARTICLE)
 #include "Particle.h"
 #include "Adafruit_Trellis.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_ILI9341.h"
 #include "PCF8574.h"
 #include "synth/types.h"
 SYSTEM_MODE(MANUAL);
 SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
 
+// Trellis pad
 Adafruit_Trellis matrix0 = Adafruit_Trellis();
 Adafruit_TrellisSet trellis =  Adafruit_TrellisSet(&matrix0);
 bool keypadUpdated = false;
@@ -16,12 +19,16 @@ uint16_t keypadState = 0;
 void keypadInterrupt();
 Timer keyUpTimer(50, keypadInterrupt, true);
 
+// Encoders
 void encoderInterrupt();
 PCF8574 encoders(0x20, ENCODER_INT_PIN, encoderInterrupt);
 uint16_t state[4] = {0, 0, 0, 0};
 int32_t position[4] = {200, 200, 1 << 6, 500};
 int32_t lastPosition[4] = {0, 0, 0, 0};
 bool encoderUpdated = false;
+
+// TFT
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
 #else
 #include <stdio.h>
 #include <string.h>
@@ -46,7 +53,7 @@ void setupEncoders() {
     encoders.begin();
 }
 
-void encoderInterrupt(){
+void encoderInterrupt() {
     encoderUpdated = true;
 }
 
@@ -83,9 +90,73 @@ void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t ste
     }
 }
 
+// 5 - 6 - 5
+#define COLOR_BG               0x00E4  ///< 155, 188,  16
+#define COLOR_BLUE             0x45FF
+#define COLOR_BLUE_SHADOW      0x2397
+#define COLOR_DIALOG_BG        0xE7BE
+#define COLOR_IN_DIALOG_SHADOW 0x9699
+
+void clearScreen() {
+    tft.setRotation(3);
+    tft.fillScreen(COLOR_BG);
+}
+
+void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release) {
+    uint8_t corner = 4;
+    uint8_t width = 160;
+    uint8_t height = 48;
+    uint8_t x = 80;
+    uint8_t y = 70;
+
+    // Dialog
+    tft.fillRect(50, 30, 220, 180, COLOR_DIALOG_BG);
+
+    // Top
+    tft.fillRect(50+corner, 30-corner, 220-(corner*2), corner, COLOR_DIALOG_BG);
+    tft.fillRect(50+(corner*2), 30-(corner*2), 220-(corner*4), corner, COLOR_DIALOG_BG);
+
+    // Bottom
+    tft.fillRect(50+corner, 210, 220-(corner*2), corner, COLOR_DIALOG_BG);
+    tft.fillRect(50, 210, corner, corner, COLOR_IN_DIALOG_SHADOW);
+    tft.fillRect(50+220-corner, 210, corner, corner, COLOR_IN_DIALOG_SHADOW);
+    tft.fillRect(50+(corner*2), 210+corner, 220-(corner*4), corner, COLOR_DIALOG_BG);
+    tft.fillRect(50+corner, 210+corner, corner, corner, COLOR_IN_DIALOG_SHADOW);
+    tft.fillRect(50+220-(corner*2), 210+corner, corner, corner, COLOR_IN_DIALOG_SHADOW);
+    tft.fillRect(50+(corner*2), 210+(corner*2), 220-(corner*4), corner, COLOR_IN_DIALOG_SHADOW);
+
+    // Button
+    tft.fillRect(x, y, width, height, COLOR_BLUE);
+    tft.fillRect(x, y+height, width, corner, COLOR_BLUE_SHADOW);
+    tft.fillRect(x, y+height+corner, width, corner, COLOR_IN_DIALOG_SHADOW);
+
+    tft.fillRect(x-corner, y+corner, corner, height-corner, COLOR_BLUE);
+    tft.fillRect(x-corner, y+height-corner, corner, corner, COLOR_BLUE_SHADOW);
+    tft.fillRect(x-corner, y+height, corner, corner, COLOR_IN_DIALOG_SHADOW);
+
+    tft.fillRect(x+width, y+corner, corner, height-corner, COLOR_BLUE);
+    tft.fillRect(x+width, y+height-corner, corner, corner, COLOR_BLUE_SHADOW);
+    tft.fillRect(x+width, y+height, corner, corner, COLOR_IN_DIALOG_SHADOW);
+    
+    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextSize(4);
+    tft.setCursor(x+(width/2) - (2*24)-12, y+8+4);
+    tft.print("PS-01");
+
+    return;
+    // 320 / 4 = 80
+    tft.fillCircle(40, 120, 20, ILI9341_RED);
+
+    tft.fillCircle(80+40, 120, 20, ILI9341_GREEN);
+
+    tft.fillCircle((80*2)+40, 120, 20, ILI9341_BLUE);
+
+    tft.fillCircle((80*3)+40, 120, 20, ILI9341_WHITE);
+}
+
 void setup() {
 #if defined(PARTICLE)
-    waitUntil(Serial.isConnected);
+    // waitUntil(Serial.isConnected);
 
     Wire.setSpeed(CLOCK_SPEED_400KHZ);
     pinMode(KEYPAD_INT_PIN, INPUT_PULLUP);
@@ -93,10 +164,14 @@ void setup() {
     trellis.begin(0x70);
 
     setupEncoders();
+
+    tft.begin();
+    clearScreen();
+    drawKnobPositions(position[0], position[1], position[2], position[3]);
 #endif
     Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
     Synth::instance()->voices[0].setFrequency(C4_HZ);
-    Synth::instance()->voices[0].setADSR(state[0], state[1], state[2], state[3]);
+    Synth::instance()->voices[0].setADSR(position[0], position[1], position[2], position[3]);
     // Synth::instance()->voices[1].setWaveform(WF_SAWTOOTH);
     // Synth::instance()->voices[1].setFrequency(C4_HZ);
     Synth::instance()->begin();
@@ -238,6 +313,7 @@ void loop() {
         position[2] = max(min(position[2], 2 << 8), 0);
         position[3] = max(min(position[3], 2 << 16), 0);
         Synth::instance()->voices[0].setADSR(position[0], position[1], position[2], position[3]);
+        drawKnobPositions(position[0], position[1], position[2], position[3]);
         encoderUpdated = false;
     }
 #endif
