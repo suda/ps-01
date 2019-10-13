@@ -82,8 +82,8 @@ typedef enum {
 #define I2S_PIN_SDOUT  (NRF_GPIO_PIN_MAP(0, 4)) // A1
 
 #define ENCODER_INT_PIN D2
-
 #define KEYPAD_INT_PIN  D3
+#define BUTTON_INT_PIN  D4
 
 #define TFT_DC A3
 #define TFT_CS A5
