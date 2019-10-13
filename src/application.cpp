@@ -23,7 +23,6 @@ Timer keyUpTimer(50, keypadInterrupt, true);
 void encoderInterrupt();
 PCF8574 encoders(0x20, ENCODER_INT_PIN, encoderInterrupt);
 uint16_t state[4] = {0, 0, 0, 0};
-int32_t position[4] = {200, 200, 1 << 6, 500};
 int32_t lastPosition[4] = {0, 0, 0, 0};
 bool encoderUpdated = false;
 
@@ -35,8 +34,12 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
 #define delay(x) SDL_Delay(x)
 #endif
 
+// Encoder position
+int32_t position[4] = {200, 200, 1 << 6, 500};
+
 #include "synth/synth.h"
 
+#if defined(PARTICLE)
 void keypadInterrupt() {
     keypadUpdated = true;
 }
@@ -153,6 +156,7 @@ void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_
 
     tft.fillCircle((80*3)+40, 120, 20, ILI9341_WHITE);
 }
+#endif
 
 void setup() {
 #if defined(PARTICLE)
