@@ -121,7 +121,9 @@ void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t ste
 #define COLOR_DIALOG_SHADOW    0xA6BA
 
 void clearScreen() {
+#if defined(PARTICLE)
     tft.setRotation(3);
+#endif
     tft.fillScreen(COLOR_BG);
 }
 
@@ -220,6 +222,7 @@ void setup() {
     tft.begin();
     clearScreen();
     drawButton();
+    tft.update();
 #endif
     Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
     Synth::instance()->voices[0].setFrequency(C4_HZ);
@@ -408,8 +411,6 @@ int main(int argc, char **argv) {
                     keep_window_open = false;
                     break;
             }
-
-            tft.update();
         }
         loop();
     }

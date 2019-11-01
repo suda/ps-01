@@ -22,7 +22,7 @@ class Adafruit_SDL : public Adafruit_GFX {
                            uint16_t color);
     private:
         SDL_Window* window;
-        SDL_Surface* screenSurface;
+        SDL_Renderer *renderer;
 };
 #endif
 
