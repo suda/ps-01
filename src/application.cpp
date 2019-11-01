@@ -1,13 +1,13 @@
 // #ifndef PARTICLE
 // #define PARTICLE
 // #endif
+#include "util/types.h"
 #if defined(PARTICLE)
 #include "Particle.h"
 #include "Adafruit_Trellis.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
 #include "PCF8574.h"
-#include "synth/types.h"
 SYSTEM_MODE(MANUAL);
 SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
 
@@ -36,7 +36,10 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
 #else
 #include <stdio.h>
 #include <string.h>
+#include "ui/Adafruit_SDL.h"
 #define delay(x) SDL_Delay(x)
+
+Adafruit_SDL tft = Adafruit_SDL();
 #endif
 
 // Encoder position
@@ -101,8 +104,10 @@ void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t ste
             return;
     }
 }
+#endif
 
 // 5 - 6 - 5
+#define COLOR_WHITE            0xFFFF
 #define COLOR_BG               0x2A28
 #define COLOR_BLUE             0x663F
 #define COLOR_BLUE_SHADOW      0x3BF8
@@ -156,7 +161,7 @@ void drawButton() {
     tft.fillRect(x+width, y+height-corner, corner, corner, COLOR_BLUE_SHADOW);
     tft.fillRect(x+width, y+height, corner, corner, COLOR_DIALOG_SHADOW);
     
-    tft.setTextColor(ILI9341_WHITE);
+    tft.setTextColor(COLOR_WHITE);
     tft.setTextSize(4);
     tft.setCursor(x+(width/2) - (2*24)-12, y+8+4);
     tft.print("PS-01");
@@ -194,7 +199,6 @@ void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_
     tft.setTextColor(COLOR_RED);
     tft.print(release);
 }
-#endif
 
 void setup() {
 #if defined(PARTICLE)
@@ -212,6 +216,10 @@ void setup() {
     clearScreen();
     // drawButton();
     drawKnobPositions(position[0], position[1], position[2], position[3]);
+#else
+    tft.begin();
+    clearScreen();
+    drawButton();
 #endif
     Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
     Synth::instance()->voices[0].setFrequency(C4_HZ);
@@ -391,8 +399,22 @@ int main(int argc, char **argv) {
     
     setup();
 
-    while (1) {
+    bool keep_window_open = true;
+    while (keep_window_open) {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) > 0) {
+            switch(e.type) {
+                case SDL_QUIT:
+                    keep_window_open = false;
+                    break;
+            }
+
+            tft.update();
+        }
         loop();
     }
+    tft.end();
+	SDL_Quit();
+    exit(0);
 }
 #endif

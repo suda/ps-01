@@ -4,8 +4,10 @@
 #if ARDUINO >= 100
  #include "Arduino.h"
  #include "Print.h"
-#else
+#elif defined(PARTICLE)
  #include "WProgram.h"
+#else
+ #include "../../../src/util/arduino_polyfill.h"
 #endif
 #include "gfxfont.h"
 
@@ -96,7 +98,7 @@ class Adafruit_GFX : public Print {
     drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color,
       uint16_t bg, uint8_t size),
     drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color,
-	      uint16_t bg, uint8_t size_x, uint8_t size_y),
+        uint16_t bg, uint8_t size_x, uint8_t size_y),
     getTextBounds(const char *string, int16_t x, int16_t y,
       int16_t *x1, int16_t *y1, uint16_t *w, uint16_t *h),
     getTextBounds(const __FlashStringHelper *s, int16_t x, int16_t y,
@@ -164,6 +166,8 @@ class Adafruit_GFX : public Print {
   void cp437(boolean x=true) { _cp437 = x; }
 
 #if ARDUINO >= 100
+  virtual size_t write(uint8_t);
+#elif !defined(PARTICLE)
   virtual size_t write(uint8_t);
 #else
   virtual void   write(uint8_t);

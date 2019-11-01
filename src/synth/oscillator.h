@@ -7,7 +7,7 @@
 #include "Particle.h"
 #endif
 
-#include "types.h"
+#include "../util/types.h"
 #include "../vendor/frannor.h"
 
 class Oscillator {
