@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <cstdlib>
-#include "../../lib/Adafruit_GFX/src/Adafruit_GFX.h"
+#include "../Adafruit_GFX/src/Adafruit_GFX.h"
 
 class Adafruit_SDL : public Adafruit_GFX {
     public:

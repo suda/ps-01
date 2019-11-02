@@ -6,11 +6,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 AUX_SOURCE_DIRECTORY(src/synth SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(src/vendor SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(src/ui SOURCE_FILES)
+AUX_SOURCE_DIRECTORY(src/ui/pages SOURCE_FILES)
 AUX_SOURCE_DIRECTORY(src/util SOURCE_FILES)
 
 list(APPEND
     SOURCE_FILES
     lib/Adafruit_GFX/src/Adafruit_GFX.cpp
+    lib/Adafruit_SDL/Adafruit_SDL.cpp
     src/application.cpp)
 
 find_package(SDL2 REQUIRED)

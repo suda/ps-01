@@ -5,8 +5,6 @@
 #if defined(PARTICLE)
 #include "Particle.h"
 #include "Adafruit_Trellis.h"
-#include "Adafruit_GFX.h"
-#include "Adafruit_ILI9341.h"
 #include "PCF8574.h"
 SYSTEM_MODE(MANUAL);
 SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
@@ -30,22 +28,14 @@ bool encoderUpdated = false;
 void buttonInterrupt();
 PCF8574 buttons(0x21, BUTTON_INT_PIN, buttonInterrupt);
 bool buttonUpdated = false;
-
-// TFT
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
-#else
-#include <stdio.h>
-#include <string.h>
-#include "ui/Adafruit_SDL.h"
-#define delay(x) SDL_Delay(x)
-
-Adafruit_SDL tft = Adafruit_SDL();
 #endif
 
 // Encoder position
 int32_t position[4] = {200, 200, 1 << 6, 500};
 
 #include "synth/synth.h"
+#include "ui/ui.h"
+UI ui = UI();
 
 #if defined(PARTICLE)
 void keypadInterrupt() {
@@ -106,103 +96,8 @@ void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t ste
 }
 #endif
 
-// 5 - 6 - 5
-#define COLOR_WHITE            0xFFFF
-#define COLOR_BG               0x2A28
-#define COLOR_BLUE             0x663F
-#define COLOR_BLUE_SHADOW      0x3BF8
-#define COLOR_GREEN            0x5F92
-#define COLOR_GREEN_SHADOW     0x34EF
-#define COLOR_PURPLE           0xCC9E
-#define COLOR_PURPLE_SHADOW    0x82B7
-#define COLOR_RED              0xF22B
-#define COLOR_RED_SHADOW       0x984A
-#define COLOR_DIALOG           0xEFDF
-#define COLOR_DIALOG_SHADOW    0xA6BA
-
-void clearScreen() {
-#if defined(PARTICLE)
-    tft.setRotation(3);
-#endif
-    tft.fillScreen(COLOR_BG);
-}
-
-void drawButton() {
-    uint8_t corner = 4;
-    uint8_t width = 160;
-    uint8_t height = 48;
-    uint8_t x = 80;
-    uint8_t y = 70;
-
-    // Dialog
-    tft.fillRect(50, 30, 220, 180, COLOR_DIALOG);
-
-    // Top
-    tft.fillRect(50+corner, 30-corner, 220-(corner*2), corner, COLOR_DIALOG);
-    tft.fillRect(50+(corner*2), 30-(corner*2), 220-(corner*4), corner, COLOR_DIALOG);
-
-    // Bottom
-    tft.fillRect(50+corner, 210, 220-(corner*2), corner, COLOR_DIALOG);
-    tft.fillRect(50, 210, corner, corner, COLOR_DIALOG_SHADOW);
-    tft.fillRect(50+220-corner, 210, corner, corner, COLOR_DIALOG_SHADOW);
-    tft.fillRect(50+(corner*2), 210+corner, 220-(corner*4), corner, COLOR_DIALOG);
-    tft.fillRect(50+corner, 210+corner, corner, corner, COLOR_DIALOG_SHADOW);
-    tft.fillRect(50+220-(corner*2), 210+corner, corner, corner, COLOR_DIALOG_SHADOW);
-    tft.fillRect(50+(corner*2), 210+(corner*2), 220-(corner*4), corner, COLOR_DIALOG_SHADOW);
-
-    // Button
-    tft.fillRect(x, y, width, height, COLOR_BLUE);
-    tft.fillRect(x, y+height, width, corner, COLOR_BLUE_SHADOW);
-    tft.fillRect(x, y+height+corner, width, corner, COLOR_DIALOG_SHADOW);
-
-    tft.fillRect(x-corner, y+corner, corner, height-corner, COLOR_BLUE);
-    tft.fillRect(x-corner, y+height-corner, corner, corner, COLOR_BLUE_SHADOW);
-    tft.fillRect(x-corner, y+height, corner, corner, COLOR_DIALOG_SHADOW);
-
-    tft.fillRect(x+width, y+corner, corner, height-corner, COLOR_BLUE);
-    tft.fillRect(x+width, y+height-corner, corner, corner, COLOR_BLUE_SHADOW);
-    tft.fillRect(x+width, y+height, corner, corner, COLOR_DIALOG_SHADOW);
-    
-    tft.setTextColor(COLOR_WHITE);
-    tft.setTextSize(4);
-    tft.setCursor(x+(width/2) - (2*24)-12, y+8+4);
-    tft.print("PS-01");
-}
-void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release) {
-    // 320 / 4 = 80
-    uint8_t radius = 32;
-    uint8_t y = 128;
-    uint8_t offset = 4;
-    uint8_t textY = y+radius+(offset*2);
-    tft.fillRect(0, textY, 320, 16, COLOR_BG);
-    tft.setTextSize(2);
-
-    // tft.fillCircle(40+offset, y+offset, radius, COLOR_BLUE_SHADOW);
-    // tft.fillCircle(40, y, radius, COLOR_BLUE);
-    tft.setCursor(40-radius, textY);
-    tft.setTextColor(COLOR_BLUE);
-    tft.print(attack);
-
-    // tft.fillCircle(80+40+offset, y+offset, radius, COLOR_GREEN_SHADOW);
-    // tft.fillCircle(80+40, y, radius, COLOR_GREEN);
-    tft.setCursor(80+40-radius, textY);
-    tft.setTextColor(COLOR_GREEN);
-    tft.print(decay);
-
-    // tft.fillCircle((80*2)+40+offset, y+offset, radius, COLOR_PURPLE_SHADOW);
-    // tft.fillCircle((80*2)+40, y, radius, COLOR_PURPLE);
-    tft.setCursor((80*2)+40-radius, textY);
-    tft.setTextColor(COLOR_PURPLE);
-    tft.print(sustain);
-
-    // tft.fillCircle((80*3)+40+offset, y+offset, radius, COLOR_RED_SHADOW);
-    // tft.fillCircle((80*3)+40, y, radius, COLOR_RED);
-    tft.setCursor((80*3)+40-radius, textY);
-    tft.setTextColor(COLOR_RED);
-    tft.print(release);
-}
-
 void setup() {
+    ui.begin();
 #if defined(PARTICLE)
     // waitUntil(Serial.isConnected);
 
@@ -214,15 +109,7 @@ void setup() {
     setupPCF(&encoders);
     setupPCF(&buttons);
 
-    tft.begin();
-    clearScreen();
-    // drawButton();
     drawKnobPositions(position[0], position[1], position[2], position[3]);
-#else
-    tft.begin();
-    clearScreen();
-    drawButton();
-    tft.update();
 #endif
     Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
     Synth::instance()->voices[0].setFrequency(C4_HZ);
@@ -413,8 +300,7 @@ int main(int argc, char **argv) {
         loop();
         SDL_Delay(10);
     }
-    tft.end();
+    ui.end();
 	SDL_Quit();
-    exit(0);
 }
 #endif

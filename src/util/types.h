@@ -109,6 +109,19 @@ typedef enum {
 #define B4_HZ  493.88
 #define C5_HZ  523.25
 
+#define COLOR_WHITE            0xFFFF
+#define COLOR_BG               0x2A28
+#define COLOR_BLUE             0x663F
+#define COLOR_BLUE_SHADOW      0x3BF8
+#define COLOR_GREEN            0x5F92
+#define COLOR_GREEN_SHADOW     0x34EF
+#define COLOR_PURPLE           0xCC9E
+#define COLOR_PURPLE_SHADOW    0x82B7
+#define COLOR_RED              0xF22B
+#define COLOR_RED_SHADOW       0x984A
+#define COLOR_DIALOG           0xEFDF
+#define COLOR_DIALOG_SHADOW    0xA6BA
+
 #define BIT_SET(a, b) ((a) |= (1ULL<<(b)))
 #define BIT_CLEAR(a, b) ((a) &= ~(1ULL<<(b)))
 #define BIT_FLIP(a, b) ((a) ^= (1ULL<<(b)))

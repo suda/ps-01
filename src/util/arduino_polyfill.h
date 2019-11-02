@@ -10,6 +10,7 @@
 #include "../vendor/WString.h"
 
 typedef bool boolean;
+#define delay(x) SDL_Delay(x)
 
 #endif // ARDUINO_POLYFILL_H
 #endif // PARTICLE
