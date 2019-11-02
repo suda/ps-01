@@ -5,7 +5,7 @@
 
 #include "oscillator.h"
 #include "adsr.h"
-#include "types.h"
+#include "../util/types.h"
 
 /**
  * A voice is a single sound generator. This class contains all its parameters
