@@ -1,3 +1,4 @@
+#if !defined(PARTICLE)
 #ifndef ARDUINO_POLYFILL_H
 #define ARDUINO_POLYFILL_H
 
@@ -11,3 +12,4 @@
 typedef bool boolean;
 
 #endif // ARDUINO_POLYFILL_H
+#endif // PARTICLE

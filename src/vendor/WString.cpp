@@ -21,6 +21,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#if !defined(PARTICLE)
 #include <stdio.h>
 #include "WString.h"
 #include "stdlib_noniso.h"
@@ -853,3 +854,4 @@ double String::toDouble(void) const
 // global empty string to allow returning const String& with nothing
 
 const String emptyString;
+#endif // PARTICLE

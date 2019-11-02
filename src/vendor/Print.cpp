@@ -20,7 +20,7 @@
  Modified December 2014 by Ivan Grokhotkov
  Modified May 2015 by Michael C. Miller - ESP31B progmem support
  */
-
+#if !defined(PARTICLE)
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -322,3 +322,4 @@ size_t Print::printFloat(double number, uint8_t digits)
 
     return n;
 }
+#endif // PARTICLE

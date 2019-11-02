@@ -19,6 +19,7 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#if !defined(PARTICLE)
 #ifndef String_class_h
 #define String_class_h
 #ifdef __cplusplus
@@ -333,3 +334,4 @@ extern const String emptyString;
 
 #endif  // __cplusplus
 #endif  // String_class_h
+#endif // PARTICLE

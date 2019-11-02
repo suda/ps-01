@@ -22,6 +22,7 @@
 
  */
 
+#if !defined(PARTICLE)
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -212,3 +213,4 @@ char * dtostrf(double number, signed char width, unsigned char prec, char *s) {
     *out = 0;
     return s;
 }
+#endif // PARTICLE

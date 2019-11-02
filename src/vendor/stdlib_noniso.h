@@ -19,6 +19,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#if !defined(PARTICLE)
 #ifndef STDLIB_NONISO_H
 #define STDLIB_NONISO_H
 
@@ -49,4 +50,5 @@ void reverse(char* begin, char* end);
 #endif
 
 
-#endif
+#endif // STDLIB_NONISO_H
+#endif // PARTICLE
