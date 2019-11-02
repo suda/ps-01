@@ -398,8 +398,6 @@ void loop() {
 
 #ifndef PARTICLE
 int main(int argc, char **argv) {
-    printf("ps-01\n");
-    
     setup();
 
     bool keep_window_open = true;
@@ -413,6 +411,7 @@ int main(int argc, char **argv) {
             }
         }
         loop();
+        SDL_Delay(10);
     }
     tft.end();
 	SDL_Quit();
