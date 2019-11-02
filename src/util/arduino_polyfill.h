@@ -5,13 +5,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../vendor/Print.h"
 #include "../vendor/WString.h"
-
-class Print {
-    public:
-        void print(char *value);
-        void print(uint16_t value);
-};
 
 typedef bool boolean;
 
