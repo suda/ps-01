@@ -21,8 +21,9 @@ class Adafruit_SDL : public Adafruit_GFX {
         void drawFastVLine(int16_t x, int16_t y, int16_t h,
                            uint16_t color);
     private:
-        SDL_Window* window;
+        SDL_Window *window;
         SDL_Renderer *renderer;
+        SDL_Texture *texture;
 };
 #endif
 

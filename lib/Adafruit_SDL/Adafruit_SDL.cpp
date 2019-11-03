@@ -14,17 +14,38 @@ void Adafruit_SDL::begin() {
         std::cout << "Failed to initialize the SDL2 library\n";
         return;
     }
-
-    SDL_CreateWindowAndRenderer(SDL_WIDTH * SCALE, SDL_HEIGHT * SCALE, 0, &window, &renderer);
-    SDL_SetWindowTitle(window, "ps-01");
+    window = SDL_CreateWindow("ps-01", SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED, SDL_WIDTH * SCALE, SDL_HEIGHT * SCALE, 0);
     if (!window) {
         std::cout << "Failed to create window\n";
         return;
     }
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+    if (!renderer) {
+        std::cout << "Failed to create renderer\n";
+        return;
+    }
+
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SDL_WIDTH * SCALE, SDL_HEIGHT * SCALE);
+    if (!texture) {
+        std::cout << "Failed to create texture\n";
+        return;
+    }
+
+    SDL_SetRenderTarget(renderer, texture);
+    SDL_RenderClear(renderer);
 }
 
 void Adafruit_SDL::update() {
-    SDL_RenderPresent(renderer);
+    // SDL renderer doesn't guarantee its contents after being presented,
+    // this is why we're rendering to a texture and then showing it instead
+    // Thanks to Will Usher: https://gist.github.com/Twinklebear/8265888 
+    SDL_SetRenderTarget(renderer, NULL);
+    SDL_RenderClear(renderer);
+	SDL_RenderCopyEx(renderer, texture, NULL, NULL, 0, NULL, SDL_FLIP_NONE);
+	SDL_RenderPresent(renderer);
+    SDL_SetRenderTarget(renderer, texture);
 }
 
 void Adafruit_SDL::end() {
