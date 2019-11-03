@@ -2,7 +2,8 @@
 
 Page::Page() {}
 
-void Page::handleAction(uint8_t action, uint16_t args[]) {}
-
-void Page::handleStoreUpdate(uint8_t storeKey) {}
-
+void Page::setup(Store &store, Store &previousStore, const Display &display) {
+    this->_store = &store;
+    this->_previousStore = &previousStore;
+    this->_display = display;
+}

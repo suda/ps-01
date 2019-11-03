@@ -97,9 +97,10 @@ void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t ste
 #endif
 
 void setup() {
-    ui.begin();
 #if defined(PARTICLE)
     // waitUntil(Serial.isConnected);
+    // delay(1000);
+    Serial.println("ps-01");
 
     Wire.setSpeed(CLOCK_SPEED_400KHZ);
     pinMode(KEYPAD_INT_PIN, INPUT_PULLUP);
@@ -109,8 +110,9 @@ void setup() {
     setupPCF(&encoders);
     setupPCF(&buttons);
 
-    drawKnobPositions(position[0], position[1], position[2], position[3]);
+    // drawKnobPositions(position[0], position[1], position[2], position[3]);
 #endif
+    ui.begin();
     Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
     Synth::instance()->voices[0].setFrequency(C4_HZ);
     Synth::instance()->voices[0].setADSR(position[0], position[1], position[2], position[3]);
@@ -120,9 +122,8 @@ void setup() {
 }
 
 // #define CYCLE
-// #define SCALE
 // #define PWM
-#define TRELLIS
+// #define TRELLIS
 
 #ifdef CYCLE
 void loop() {
@@ -162,31 +163,6 @@ void loop() {
     delay(del);
     Synth::instance()->voices[0].setFrequency(G4_HZ);
     delay(del);
-}
-#endif
-
-#ifdef SCALE
-// float scale[] = { C4_HZ, D4_HZ, E4_HZ, F4_HZ, G4_HZ, A4_HZ, B4_HZ, C5_HZ, B4_HZ, A4_HZ, G4_HZ, F4_HZ, E4_HZ, D4_HZ };
-float scale[] = { C4_HZ, D4_HZ, E4_HZ, F4_HZ, G4_HZ, A4_HZ, B4_HZ, C5_HZ };
-
-void loop() {
-    Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
-    for (int i=0; i<sizeof(scale)/sizeof(float); ++i) {
-        trellis.setLED(i);
-        trellis.writeDisplay();
-        Synth::instance()->voices[0].setFrequency(scale[i]);
-        Synth::instance()->voices[0].setGate(true);
-        delay(600);
-        Synth::instance()->voices[0].setGate(false);
-        delay(1000);
-        trellis.clrLED(i);
-        trellis.writeDisplay();
-    }
-    // Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
-    // for (int i=0; i<sizeof(scale)/sizeof(float); ++i) {
-    //     Synth::instance()->voices[0].setFrequency(scale[i]);
-    //     delay(500);
-    // }
 }
 #endif
 
@@ -283,8 +259,14 @@ void loop() {
 }
 #endif
 
+void loop() {
+    MK_ARGS(args, (uint16_t)millis(), 0, 0, 0)
+    ui.dispatchAction(ACTION_TICK, args);
+}
+
 #ifndef PARTICLE
 int main(int argc, char **argv) {
+    printf("ps-01\n");
     setup();
 
     bool keep_window_open = true;

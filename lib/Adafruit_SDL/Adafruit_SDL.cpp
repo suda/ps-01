@@ -84,12 +84,14 @@ void Adafruit_SDL::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color
     Uint8 *rgb = rgb565to888(color);
     SDL_SetRenderDrawColor(renderer, rgb[0], rgb[1], rgb[2], 255);
     SDL_RenderDrawLine(renderer, x * SCALE, y * SCALE, (x + w - 1) * SCALE, y * SCALE);
+    SDL_RenderDrawLine(renderer, x * SCALE, y * SCALE + 1, (x + w - 1) * SCALE, y * SCALE + 1);
     free(rgb);
 }
 void Adafruit_SDL::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
     Uint8 *rgb = rgb565to888(color);
     SDL_SetRenderDrawColor(renderer, rgb[0], rgb[1], rgb[2], 255);
     SDL_RenderDrawLine(renderer, x * SCALE, y * SCALE, x * SCALE, (y + h - 1) * SCALE);
+    SDL_RenderDrawLine(renderer, x * SCALE + 1, y * SCALE, x * SCALE + 1, (y + h - 1) * SCALE);
     free(rgb);
 }
 #endif

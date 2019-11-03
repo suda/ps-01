@@ -11,6 +11,7 @@
 
 typedef bool boolean;
 #define delay(x) SDL_Delay(x)
+#define millis() SDL_GetTicks()
 
 #endif // ARDUINO_POLYFILL_H
 #endif // PARTICLE
