@@ -113,11 +113,6 @@ void setup() {
     // drawKnobPositions(position[0], position[1], position[2], position[3]);
 #endif
     ui.begin();
-    Synth::instance()->voices[0].setWaveform(WF_TRIANGLE);
-    Synth::instance()->voices[0].setFrequency(C4_HZ);
-    Synth::instance()->voices[0].setADSR(position[0], position[1], position[2], position[3]);
-    // Synth::instance()->voices[1].setWaveform(WF_SAWTOOTH);
-    // Synth::instance()->voices[1].setFrequency(C4_HZ);
     Synth::instance()->begin();
 }
 
@@ -260,11 +255,154 @@ void loop() {
 #endif
 
 void loop() {
-    MK_ARGS(args, (uint16_t)millis(), 0, 0, 0)
+    MK_ARGS(args, (int16_t)millis(), 0, 0, 0)
     ui.dispatchAction(ACTION_TICK, args);
 }
 
 #ifndef PARTICLE
+void handleKey(SDL_Event &event) {
+    /*
+        Key mapping
+
+        Keypad:
+        [1] [2] [3] [4]
+        [Q] [W] [E] [R]
+        [A] [S] [D] [F]
+        [Z] [X] [C] [V]
+
+        Encoders:
+        [9] [0]
+        [O] [P]
+        [L] [;]
+        [.] [/]
+
+        Others:
+        [-] Vol -
+        [+] Vol +
+        [Esc] Back
+    */
+    int16_t key;
+    switch (event.key.keysym.scancode)
+    {
+    // Keypad
+    case SDL_SCANCODE_1:
+        key = KEYPAD_1;
+        break;
+    case SDL_SCANCODE_2:
+        key = KEYPAD_2;
+        break;
+    case SDL_SCANCODE_3:
+        key = KEYPAD_3;
+        break;
+    case SDL_SCANCODE_4:
+        key = KEYPAD_4;
+        break;
+    case SDL_SCANCODE_Q:
+        key = KEYPAD_5;
+        break;
+    case SDL_SCANCODE_W:
+        key = KEYPAD_6;
+        break;
+    case SDL_SCANCODE_E:
+        key = KEYPAD_7;
+        break;
+    case SDL_SCANCODE_R:
+        key = KEYPAD_8;
+        break;
+    case SDL_SCANCODE_A:
+        key = KEYPAD_9;
+        break;
+    case SDL_SCANCODE_S:
+        key = KEYPAD_10;
+        break;
+    case SDL_SCANCODE_D:
+        key = KEYPAD_11;
+        break;
+    case SDL_SCANCODE_F:
+        key = KEYPAD_12;
+        break;
+    case SDL_SCANCODE_Z:
+        key = KEYPAD_13;
+        break;
+    case SDL_SCANCODE_X:
+        key = KEYPAD_14;
+        break;
+    case SDL_SCANCODE_C:
+        key = KEYPAD_15;
+        break;
+    case SDL_SCANCODE_V:
+        key = KEYPAD_16;
+        break;
+    // Other keys
+    case SDL_SCANCODE_ESCAPE:
+        key = KEY_BACK;
+        break;
+    case SDL_SCANCODE_MINUS:
+        key = KEY_VOL_MINUS;
+        break;
+    case SDL_SCANCODE_EQUALS:
+        key = KEY_VOL_PLUS;
+        break;
+    default:
+        break;
+    }
+
+    if (key) {
+        uint8_t action = event.type == SDL_KEYDOWN ? ACTION_KEY_DOWN : ACTION_KEY_UP;
+        MK_ARGS(args, key, 0, 0, 0)
+        ui.dispatchAction(action, args);
+        return;
+    }
+    if (event.type != SDL_KEYUP) {
+        return;
+    }
+    int16_t encoder, change;
+    switch (event.key.keysym.scancode)
+    {
+    case SDL_SCANCODE_9:
+        encoder = ENCODER_BLUE;
+        change = -1;
+        break;
+    case SDL_SCANCODE_0:
+        encoder = ENCODER_BLUE;
+        change = 1;
+        break;
+    case SDL_SCANCODE_O:
+        encoder = ENCODER_GREEN;
+        change = -1;
+        break;
+    case SDL_SCANCODE_P:
+        encoder = ENCODER_GREEN;
+        change = 1;
+        break;
+    case SDL_SCANCODE_L:
+        encoder = ENCODER_PURPLE;
+        change = -1;
+        break;
+    case SDL_SCANCODE_SEMICOLON:
+        encoder = ENCODER_PURPLE;
+        change = 1;
+        break;
+    case SDL_SCANCODE_PERIOD:
+        encoder = ENCODER_RED;
+        change = -1;
+        break;
+    case SDL_SCANCODE_SLASH:
+        encoder = ENCODER_RED;
+        change = 1;
+        break;
+    default:
+        break;
+    }
+    if (encoder) {
+        MK_ARGS(args, encoder, change, 0, 0)
+        ui.dispatchAction(ACTION_ENCODER_CHANGE, args);
+        return;
+    }
+    
+    printf("Key not mapped: %s\n", SDL_GetScancodeName(event.key.keysym.scancode));
+}
+
 int main(int argc, char **argv) {
     printf("ps-01\n");
     setup();
@@ -276,6 +414,10 @@ int main(int argc, char **argv) {
             switch(e.type) {
                 case SDL_QUIT:
                     keep_window_open = false;
+                    break;
+                case SDL_KEYDOWN:
+                case SDL_KEYUP:
+                    handleKey(e);
                     break;
             }
         }

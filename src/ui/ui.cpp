@@ -15,7 +15,7 @@ void UI::end() {
     display.end();
 }
 
-void UI::dispatchAction(uint8_t action, uint16_t args[]) {
+void UI::dispatchAction(uint8_t action, int16_t args[]) {
     scaleTestPage.handleAction(action, args);
     // Copy the contents of the current store to know the difference
     // when firing a next action

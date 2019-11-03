@@ -10,7 +10,7 @@ class UI {
         void begin();
         void update();
         void end();
-        void dispatchAction(uint8_t action, uint16_t args[]);
+        void dispatchAction(uint8_t action, int16_t args[]);
 
     private:
         void initPages();

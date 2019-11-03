@@ -4,7 +4,7 @@
 class ScaleTestPage: public Page {
     public:
         ScaleTestPage();
-        void handleAction(uint8_t action, uint16_t args[]);
+        void handleAction(uint8_t action, int16_t args[]);
         void handleStoreUpdate(uint8_t storeKey);
     private:
         void drawKeys();

@@ -42,6 +42,7 @@ struct Store {
     // ScaleTestPage
     uint32_t stLastTick;
     uint8_t stCurrentNote;
+    Waveform stCurrentWaveform = WF_TRIANGLE;
 };
 
 #define BUFFER_SIZE     1024
