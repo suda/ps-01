@@ -2,38 +2,38 @@
 
 [![Build Status](https://travis-ci.org/suda/ps-01.svg?branch=master)](https://travis-ci.org/suda/ps-01)
 
-Software synthesizer running on Particle 3rd gen devices (Argon, Boron or Xenon), inspired by MOS6581 and Pocket Operator.
+Software synthesizer that can be run on Particle 3rd gen devices (Argon, Boron or Xenon) as well as desktop. Inspired by MOS6581 and the Pocket Operator series.
 
 ## Abstract
 
+**This is a work in progress.** You can follow the updates on:
+* [Hackaday](https://hackaday.io/project/167405-ps-01)
+* [Instagram stories](https://www.instagram.com/stories/highlights/18089019253003770/)
+* [YouTube playlist](https://www.youtube.com/playlist?list=PLW9dSXWX1cLJcqKuNrfPg6BXtz2fbAJwX)
+
 [See planned milestones and features](docs/ps-01.pdf).
 
-### Hardware
 
-This is a tentative list of components used in this build:
-
-* [Particle 3rd gen device (Argon/Boron/Xenon)](https://store.particle.io/collections/bluetooth)
-* [Adafruit I2S Stereo Decoder](https://www.adafruit.com/product/3678)
-* 320x240 TFT LCD compatible with [Adafruit GFX Graphics Library](https://learn.adafruit.com/adafruit-gfx-graphics-library/overview)
-* four rotary encoders with switches driven by [PCF8574](https://www.ti.com/lit/ds/symlink/pcf8574.pdf)
-* [Adafruit Trellis](https://www.adafruit.com/product/1616) keypad
-* [MAX3421E based USB host controller](https://www.aliexpress.com/item/32735946108.html)
-
-#### Circuit diagram
-![](docs/diagram.png)
-
-### Software
+## Running
 
 This synth is designed to run both on embedded device but also to be compiled on a desktop (helps with debugging).
 
-#### Compiling for desktop
+### Desktop (macOS/Linux/Windows)
 
 ```
 $ cmake .
 $ make
 $ ./build/ps_01
 ```
-#### UI
+
+### Particle
+
+1. Assemble the [hardware](docs/hardware.md).
+2. Open this repo in [Particle Workbench](https://www.particle.io/workbench)
+3. Set `deviceOS@1.4.2` and the correct device you're using (`xenon`, `argon` or `boron`)
+4. Flash the project to the device
+
+## UI
 
 ![](docs/ui/color_v1@2x.png)
 [UI documentation and guidelines](docs/ui.md)
