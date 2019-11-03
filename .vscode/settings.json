@@ -1,6 +1,29 @@
 {
-    "particle.firmwareVersion": "1.4.0",
+    "particle.firmwareVersion": "1.4.2",
     "cortex-debug.openocdPath": "${command:particle.getDebuggerOpenocdPath}",
     "particle.targetPlatform": "xenon",
-    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core"
+    "C_Cpp.default.configurationProvider": "particle.particle-vscode-core",
+    "files.associations": {
+        "random": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "initializer_list": "cpp",
+        "algorithm": "cpp",
+        "__functional_base": "cpp",
+        "__functional_base_03": "cpp",
+        "__tuple": "cpp",
+        "chrono": "cpp",
+        "functional": "cpp",
+        "limits": "cpp",
+        "memory": "cpp",
+        "ratio": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "string_view": "cpp",
+        "typeinfo": "cpp"
+    }
 }
