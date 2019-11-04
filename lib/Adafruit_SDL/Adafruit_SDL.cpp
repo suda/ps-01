@@ -66,6 +66,9 @@ void Adafruit_SDL::drawPixel(int16_t x, int16_t y, uint16_t color) {
     Uint8 *rgb = rgb565to888(color);
     SDL_SetRenderDrawColor(renderer, rgb[0], rgb[1], rgb[2], 255);
     SDL_RenderDrawPoint(renderer, x * SCALE, y * SCALE);
+    SDL_RenderDrawPoint(renderer, x * SCALE + 1, y * SCALE);
+    SDL_RenderDrawPoint(renderer, x * SCALE, y * SCALE + 1);
+    SDL_RenderDrawPoint(renderer, x * SCALE + 1, y * SCALE + 1);
     free(rgb);
 }
 void Adafruit_SDL::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) {
