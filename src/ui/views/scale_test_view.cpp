@@ -1,13 +1,13 @@
-#include "scale_test_page.h"
+#include "scale_test_view.h"
 
 float scale[] = { C4_HZ, D4_HZ, E4_HZ, F4_HZ, G4_HZ, A4_HZ, B4_HZ, C5_HZ };
 
-ScaleTestPage::ScaleTestPage(): Page() {}
+ScaleTestView::ScaleTestView(): View() {}
 
-void ScaleTestPage::handleAction(uint8_t action, int16_t args[]) {
+void ScaleTestView::handleAction(uint8_t action, int16_t args[]) {
     switch (action)
     {
-    case ACTION_PAGE_INIT:
+    case ACTION_VIEW_INIT:
         keys = 10;
         keyWidth = 18;
         width = keys * keyWidth;
@@ -66,7 +66,7 @@ void ScaleTestPage::handleAction(uint8_t action, int16_t args[]) {
     }
 }
 
-void ScaleTestPage::handleStoreUpdate(uint8_t storeKey) {
+void ScaleTestView::handleStoreUpdate(uint8_t storeKey) {
     if (storeKey == STORE_ST_CURRENT_NOTE) {
         Synth::instance()->voices[0].setFrequency(scale[_store->stCurrentNote]);
         // Redraw the previous one...
@@ -80,7 +80,7 @@ void ScaleTestPage::handleStoreUpdate(uint8_t storeKey) {
     }
 }
 
-void ScaleTestPage::drawKeys() {
+void ScaleTestView::drawKeys() {
     _display.tft.fillRect(x, y, width, height, COLOR_WHITE);
     _display.tft.fillRect(x, y - CORNER_SIZE, width, CORNER_SIZE, COLOR_BLACK);
     _display.tft.fillRect(x - CORNER_SIZE, y, CORNER_SIZE, height - CORNER_SIZE, COLOR_BLACK);
@@ -96,7 +96,7 @@ void ScaleTestPage::drawKeys() {
     }
 }
 
-void ScaleTestPage::drawKey(uint8_t key, uint16_t color) {
+void ScaleTestView::drawKey(uint8_t key, uint16_t color) {
     _display.tft.fillCircle(
         x + (keyWidth * (key + 1)) + 9,
         y + height - 14,

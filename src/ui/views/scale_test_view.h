@@ -1,9 +1,9 @@
-#include "page.h"
+#include "view.h"
 #include "../../synth/synth.h"
 
-class ScaleTestPage: public Page {
+class ScaleTestView: public View {
     public:
-        ScaleTestPage();
+        ScaleTestView();
         void handleAction(uint8_t action, int16_t args[]);
         void handleStoreUpdate(uint8_t storeKey);
     private:

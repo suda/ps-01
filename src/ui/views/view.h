@@ -4,7 +4,7 @@
 #include "../display.h"
 
 #define ACTION_TICK           1
-#define ACTION_PAGE_INIT      2
+#define ACTION_VIEW_INIT      2
 #define ACTION_KEY_DOWN       10
 #define ACTION_KEY_UP         11
 #define ACTION_ENCODER_CHANGE 12
@@ -39,9 +39,9 @@
 #define ENCODER_PURPLE        3
 #define ENCODER_RED           4
 
-class Page {
+class View {
     public:
-        Page();
+        View();
         void setup(Store &store, Store &previousStore, const Display &display);
         virtual void handleAction(uint8_t action, int16_t args[]) = 0;
         virtual void handleStoreUpdate(uint8_t storeKey) = 0;

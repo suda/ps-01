@@ -2,7 +2,7 @@
 
 #include "display.h"
 // Include all pages
-#include "pages/scale_test_page.h"
+#include "views/scale_test_view.h"
 
 class UI {
     public:
@@ -13,10 +13,10 @@ class UI {
         void dispatchAction(uint8_t action, int16_t args[]);
 
     private:
-        void initPages();
+        void initViews();
 
         Display display;
-        ScaleTestPage scaleTestPage;
+        ScaleTestView scaleTestView;
 
         struct Store previousStore;
         struct Store store;
