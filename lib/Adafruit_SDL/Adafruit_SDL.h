@@ -2,7 +2,7 @@
 #define ADAFRUIT_SDL_H
 
 #if !defined(PARTICLE)
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <iostream>
 #include <cstdlib>
 #include "../Adafruit_GFX/src/Adafruit_GFX.h"
