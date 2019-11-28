@@ -2,6 +2,7 @@
 
 #include "../util/types.h"
 #include "../../lib/Adafruit_GFX/src/Adafruit_GFX.h"
+#include "ui.h"
 #if defined(PARTICLE)
   #include "Adafruit_GFX.h"
   #include "Adafruit_ILI9341.h"

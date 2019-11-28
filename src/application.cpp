@@ -4,18 +4,9 @@
 #include "util/types.h"
 #if defined(PARTICLE)
 #include "Particle.h"
-#include "Adafruit_Trellis.h"
 #include "PCF8574.h"
 SYSTEM_MODE(MANUAL);
 SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
-
-// Trellis pad
-Adafruit_Trellis matrix0 = Adafruit_Trellis();
-Adafruit_TrellisSet trellis =  Adafruit_TrellisSet(&matrix0);
-bool keypadUpdated = false;
-uint16_t keypadState = 0;
-void keypadInterrupt();
-Timer keyUpTimer(50, keypadInterrupt, true);
 
 // Encoders
 void encoderInterrupt();
@@ -35,13 +26,11 @@ int32_t position[4] = {200, 200, 1 << 6, 500};
 
 #include "synth/synth.h"
 #include "ui/dispatcher.h"
+#include "ui/keypad.h"
 Dispatcher dispatcher = Dispatcher();
+Keypad keypad = Keypad();
 
 #if defined(PARTICLE)
-void keypadInterrupt() {
-    keypadUpdated = true;
-}
-
 void setupPCF(PCF8574 *pcf) {
     pcf->pinMode(P0, INPUT);
     pcf->pinMode(P1, INPUT);
@@ -102,16 +91,12 @@ void setup() {
     // delay(1000);
     Serial.println("ps-01");
 
-    Wire.setSpeed(CLOCK_SPEED_400KHZ);
-    pinMode(KEYPAD_INT_PIN, INPUT_PULLUP);
-    attachInterrupt(KEYPAD_INT_PIN, keypadInterrupt, CHANGE);
-    trellis.begin(0x70);
-
     setupPCF(&encoders);
     setupPCF(&buttons);
 
     // drawKnobPositions(position[0], position[1], position[2], position[3]);
 #endif
+    keypad.begin(dispatcher);
     dispatcher.begin();
     Synth::instance()->begin();
 }
@@ -167,44 +152,7 @@ float scale[] = { C4_HZ, C4S_HZ, D4_HZ, D4S_HZ, E4_HZ, F4_HZ, F4S_HZ, G4_HZ, G4S
 void loop() {
 #if defined(PARTICLE)
     // delay(30);
-    if (keypadUpdated) {
-        if (trellis.readSwitches()) {
-            bool keypadChanged = false;
-            bool anyKeyPressed = false;
-            for (uint8_t i=0; i<16; i++) {
-                bool state = trellis.isKeyPressed(i);
-                anyKeyPressed |= state;
-                if (state != BIT_CHECK(keypadState, i)) {
-                    // State changed
-                    keypadChanged = true;
-
-                    if (state) {
-                        trellis.setLED(i);
-                        BIT_SET(keypadState, i);
-                        Synth::instance()->voices[0].setFrequency(scale[i]);
-                        Synth::instance()->voices[0].setGate(true);
-                    } else {
-                        trellis.clrLED(i);
-                        BIT_CLEAR(keypadState, i);
-                        Synth::instance()->voices[0].setGate(false);
-                    }
-                }
-            }
-            
-            if (keypadChanged) {
-                trellis.writeDisplay();
-            }
-
-            // This is silly but necessary. HT16K33 doesn't trigger interrup
-            // on key up so we need to check manually with a timer
-            if (anyKeyPressed) {
-                keyUpTimer.reset();
-            }
-        } else {
-            keyUpTimer.reset();
-        }
-        keypadUpdated = false;
-    }
+    keypad.loop();
     
     if (encoderUpdated) {
         PCF8574::DigitalInput input = encoders.digitalReadAll();
@@ -260,149 +208,6 @@ void loop() {
 }
 
 #ifndef PARTICLE
-void handleKey(SDL_Event &event) {
-    /*
-        Key mapping
-
-        Keypad:
-        [1] [2] [3] [4]
-        [Q] [W] [E] [R]
-        [A] [S] [D] [F]
-        [Z] [X] [C] [V]
-
-        Encoders:
-        [9] [0]
-        [O] [P]
-        [L] [;]
-        [.] [/]
-
-        Others:
-        [-] Vol -
-        [+] Vol +
-        [Esc] Back
-    */
-    int16_t key;
-    switch (event.key.keysym.scancode)
-    {
-    // Keypad
-    case SDL_SCANCODE_1:
-        key = KEYPAD_1;
-        break;
-    case SDL_SCANCODE_2:
-        key = KEYPAD_2;
-        break;
-    case SDL_SCANCODE_3:
-        key = KEYPAD_3;
-        break;
-    case SDL_SCANCODE_4:
-        key = KEYPAD_4;
-        break;
-    case SDL_SCANCODE_Q:
-        key = KEYPAD_5;
-        break;
-    case SDL_SCANCODE_W:
-        key = KEYPAD_6;
-        break;
-    case SDL_SCANCODE_E:
-        key = KEYPAD_7;
-        break;
-    case SDL_SCANCODE_R:
-        key = KEYPAD_8;
-        break;
-    case SDL_SCANCODE_A:
-        key = KEYPAD_9;
-        break;
-    case SDL_SCANCODE_S:
-        key = KEYPAD_10;
-        break;
-    case SDL_SCANCODE_D:
-        key = KEYPAD_11;
-        break;
-    case SDL_SCANCODE_F:
-        key = KEYPAD_12;
-        break;
-    case SDL_SCANCODE_Z:
-        key = KEYPAD_13;
-        break;
-    case SDL_SCANCODE_X:
-        key = KEYPAD_14;
-        break;
-    case SDL_SCANCODE_C:
-        key = KEYPAD_15;
-        break;
-    case SDL_SCANCODE_V:
-        key = KEYPAD_16;
-        break;
-    // Other keys
-    case SDL_SCANCODE_ESCAPE:
-        key = KEY_BACK;
-        break;
-    case SDL_SCANCODE_MINUS:
-        key = KEY_VOL_MINUS;
-        break;
-    case SDL_SCANCODE_EQUALS:
-        key = KEY_VOL_PLUS;
-        break;
-    default:
-        break;
-    }
-
-    if (key) {
-        uint8_t action = event.type == SDL_KEYDOWN ? ACTION_KEY_DOWN : ACTION_KEY_UP;
-        MK_ARGS(args, key, 0, 0, 0)
-        dispatcher.dispatchAction(action, args);
-        return;
-    }
-    if (event.type != SDL_KEYUP) {
-        return;
-    }
-    int16_t encoder, change;
-    switch (event.key.keysym.scancode)
-    {
-    case SDL_SCANCODE_9:
-        encoder = ENCODER_BLUE;
-        change = -1;
-        break;
-    case SDL_SCANCODE_0:
-        encoder = ENCODER_BLUE;
-        change = 1;
-        break;
-    case SDL_SCANCODE_O:
-        encoder = ENCODER_GREEN;
-        change = -1;
-        break;
-    case SDL_SCANCODE_P:
-        encoder = ENCODER_GREEN;
-        change = 1;
-        break;
-    case SDL_SCANCODE_L:
-        encoder = ENCODER_PURPLE;
-        change = -1;
-        break;
-    case SDL_SCANCODE_SEMICOLON:
-        encoder = ENCODER_PURPLE;
-        change = 1;
-        break;
-    case SDL_SCANCODE_PERIOD:
-        encoder = ENCODER_RED;
-        change = -1;
-        break;
-    case SDL_SCANCODE_SLASH:
-        encoder = ENCODER_RED;
-        change = 1;
-        break;
-    default:
-        break;
-    }
-    if (encoder) {
-        MK_ARGS(args, encoder, change, 0, 0)
-        dispatcher.dispatchAction(ACTION_ENCODER_CHANGE, args);
-        return;
-    }
-    
-    printf("Key not mapped: %s\n", SDL_GetScancodeName(event.key.keysym.scancode));
-}
-
 int main(int argc, char **argv) {
     printf("ps-01\n");
     setup();
@@ -417,7 +222,7 @@ int main(int argc, char **argv) {
                     break;
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
-                    handleKey(e);
+                    keypad.handleKey(e);
                     break;
             }
         }

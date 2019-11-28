@@ -13,7 +13,6 @@
 #endif
 
 #include "scale.h"
-#include "ui.h"
 
 // ADSR states
 typedef enum {
