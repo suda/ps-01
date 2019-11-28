@@ -13,3 +13,7 @@
 #define A4S_HZ 466.16
 #define B4_HZ  493.88
 #define C5_HZ  523.25
+#define C5S_HZ 554.37
+#define D5_HZ  587.33
+#define D5S_HZ 622.25
+#define E5_HZ  659.25

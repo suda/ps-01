@@ -4,6 +4,7 @@
 #include "store.h"
 // Include all pages
 #include "views/scale_test_view.h"
+#include "views/keypad_test_view.h"
 
 class Dispatcher {
     public:
@@ -18,6 +19,7 @@ class Dispatcher {
 
         Display display;
         ScaleTestView scaleTestView;
+        KeypadTestView keypadTestView;
 
         struct Store previousStore;
         struct Store store;

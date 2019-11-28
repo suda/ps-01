@@ -18,7 +18,9 @@ void Keypad::begin(Dispatcher &dispatcher) {
 }
 
 void Keypad::updateLight(uint8_t light, bool state) {
+#if defined(PARTICLE)
     state ? _trellis.setLED(light) : _trellis.clrLED(light);
+#endif
 }
 
 #if defined(PARTICLE)

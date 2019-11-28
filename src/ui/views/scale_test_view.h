@@ -1,3 +1,5 @@
+#pragma once
+
 #include "view.h"
 #include "../store.h"
 #include "../../synth/synth.h"

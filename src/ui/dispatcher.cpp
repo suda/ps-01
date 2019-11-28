@@ -16,13 +16,16 @@ void Dispatcher::end() {
 }
 
 void Dispatcher::dispatchAction(uint8_t action, int16_t args[]) {
-    scaleTestView.handleAction(action, args);
+    // scaleTestView.handleAction(action, args);
+    keypadTestView.handleAction(action, args);
     // Copy the contents of the current store to know the difference
     // when firing a next action
     previousStore = store;
 }
 
 void Dispatcher::initViews() {
-    scaleTestView = ScaleTestView();
-    scaleTestView.setup(store, previousStore, display);
+    // scaleTestView = ScaleTestView();
+    // scaleTestView.setup(store, previousStore, display);
+    keypadTestView = KeypadTestView();
+    keypadTestView.setup(store, previousStore, display);
 }
