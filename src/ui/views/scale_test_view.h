@@ -7,8 +7,10 @@ class ScaleTestView: public View {
         void handleAction(uint8_t action, int16_t args[]);
         void handleStoreUpdate(uint8_t storeKey);
     private:
+        void init();
         void drawKeys();
         void drawKey(uint8_t key, uint16_t color);
+        void drawWaveforms();
         uint8_t keys;
         uint8_t keyWidth;
         uint16_t width;

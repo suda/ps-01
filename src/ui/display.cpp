@@ -73,26 +73,26 @@ void Display::drawTabs() {
     drawTab(244, COLOR_RED, COLOR_RED_SHADOW);
 }
 
-void Display::drawButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height) {
-    drawDialog();
+void Display::drawButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color, uint16_t shadowColor) {
+    // drawDialog();
 
     // Button
-    tft.fillRect(x, y, width, height, COLOR_BLUE);
-    tft.fillRect(x, y+height, width, CORNER_SIZE, COLOR_BLUE_SHADOW);
+    tft.fillRect(x, y, width, height, color);
+    tft.fillRect(x, y+height, width, CORNER_SIZE, shadowColor);
     tft.fillRect(x, y+height+CORNER_SIZE, width, CORNER_SIZE, COLOR_DIALOG_SHADOW);
 
-    tft.fillRect(x-CORNER_SIZE, y+CORNER_SIZE, CORNER_SIZE, height-CORNER_SIZE, COLOR_BLUE);
-    tft.fillRect(x-CORNER_SIZE, y+height-CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, COLOR_BLUE_SHADOW);
+    tft.fillRect(x-CORNER_SIZE, y+CORNER_SIZE, CORNER_SIZE, height-CORNER_SIZE, color);
+    tft.fillRect(x-CORNER_SIZE, y+height-CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, shadowColor);
     tft.fillRect(x-CORNER_SIZE, y+height, CORNER_SIZE, CORNER_SIZE, COLOR_DIALOG_SHADOW);
 
-    tft.fillRect(x+width, y+CORNER_SIZE, CORNER_SIZE, height-CORNER_SIZE, COLOR_BLUE);
-    tft.fillRect(x+width, y+height-CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, COLOR_BLUE_SHADOW);
+    tft.fillRect(x+width, y+CORNER_SIZE, CORNER_SIZE, height-CORNER_SIZE, color);
+    tft.fillRect(x+width, y+height-CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, shadowColor);
     tft.fillRect(x+width, y+height, CORNER_SIZE, CORNER_SIZE, COLOR_DIALOG_SHADOW);
     
-    tft.setTextColor(COLOR_WHITE);
-    tft.setTextSize(4);
-    tft.setCursor(x+(width/2) - (2*24)-12, y+8+4);
-    tft.print("PS-01");
+    // tft.setTextColor(COLOR_WHITE);
+    // tft.setTextSize(4);
+    // tft.setCursor(x+(width/2) - (2*24)-12, y+8+4);
+    // tft.print("PS-01");
 }
 
 void Display::drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release) {

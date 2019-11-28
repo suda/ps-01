@@ -22,7 +22,7 @@ class Display {
         void drawDialog();
         void drawTab(uint16_t x, uint16_t color, uint16_t shadowColor);
         void drawTabs();
-        void drawButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
+        void drawButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint16_t color, uint16_t shadowColor);
         void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release);
 
 #if defined(PARTICLE)

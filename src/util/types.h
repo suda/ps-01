@@ -141,6 +141,8 @@ struct Store {
 #define COLOR_RED_SHADOW       0x984A
 #define COLOR_ORANGE           0xFD20
 #define COLOR_ORANGE_SHADOW    0xD240
+#define COLOR_GRAY             0xB619
+#define COLOR_GRAY_SHADOW      0x6BF1
 #define COLOR_DIALOG           0xEFDF
 #define COLOR_DIALOG_SHADOW    0xA6BA
 
