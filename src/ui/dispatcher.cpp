@@ -1,28 +1,28 @@
-#include "ui.h"
+#include "dispatcher.h"
 
-UI::UI() {}
+Dispatcher::Dispatcher() {}
 
-void UI::begin() {
+void Dispatcher::begin() {
     display.begin();
     initViews();
     MK_ARGS(args, 0, 0, 0, 0)
     dispatchAction(ACTION_VIEW_INIT, args);
 }
 
-void UI::update() {}
+void Dispatcher::update() {}
 
-void UI::end() {
+void Dispatcher::end() {
     display.end();
 }
 
-void UI::dispatchAction(uint8_t action, int16_t args[]) {
+void Dispatcher::dispatchAction(uint8_t action, int16_t args[]) {
     scaleTestView.handleAction(action, args);
     // Copy the contents of the current store to know the difference
     // when firing a next action
     previousStore = store;
 }
 
-void UI::initViews() {
+void Dispatcher::initViews() {
     scaleTestView = ScaleTestView();
     scaleTestView.setup(store, previousStore, display);
 }

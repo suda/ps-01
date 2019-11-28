@@ -1,12 +1,13 @@
 #pragma once
 
 #include "display.h"
+#include "store.h"
 // Include all pages
 #include "views/scale_test_view.h"
 
-class UI {
+class Dispatcher {
     public:
-        UI();
+        Dispatcher();
         void begin();
         void update();
         void end();

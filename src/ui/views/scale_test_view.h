@@ -1,4 +1,5 @@
 #include "view.h"
+#include "../store.h"
 #include "../../synth/synth.h"
 
 class ScaleTestView: public View {

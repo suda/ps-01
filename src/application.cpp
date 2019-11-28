@@ -34,8 +34,8 @@ bool buttonUpdated = false;
 int32_t position[4] = {200, 200, 1 << 6, 500};
 
 #include "synth/synth.h"
-#include "ui/ui.h"
-UI ui = UI();
+#include "ui/dispatcher.h"
+Dispatcher dispatcher = Dispatcher();
 
 #if defined(PARTICLE)
 void keypadInterrupt() {
@@ -112,7 +112,7 @@ void setup() {
 
     // drawKnobPositions(position[0], position[1], position[2], position[3]);
 #endif
-    ui.begin();
+    dispatcher.begin();
     Synth::instance()->begin();
 }
 
@@ -256,7 +256,7 @@ void loop() {
 
 void loop() {
     MK_ARGS(args, (int16_t)millis(), 0, 0, 0)
-    ui.dispatchAction(ACTION_TICK, args);
+    dispatcher.dispatchAction(ACTION_TICK, args);
 }
 
 #ifndef PARTICLE
@@ -350,7 +350,7 @@ void handleKey(SDL_Event &event) {
     if (key) {
         uint8_t action = event.type == SDL_KEYDOWN ? ACTION_KEY_DOWN : ACTION_KEY_UP;
         MK_ARGS(args, key, 0, 0, 0)
-        ui.dispatchAction(action, args);
+        dispatcher.dispatchAction(action, args);
         return;
     }
     if (event.type != SDL_KEYUP) {
@@ -396,7 +396,7 @@ void handleKey(SDL_Event &event) {
     }
     if (encoder) {
         MK_ARGS(args, encoder, change, 0, 0)
-        ui.dispatchAction(ACTION_ENCODER_CHANGE, args);
+        dispatcher.dispatchAction(ACTION_ENCODER_CHANGE, args);
         return;
     }
     
@@ -424,7 +424,7 @@ int main(int argc, char **argv) {
         loop();
         SDL_Delay(10);
     }
-    ui.end();
+    dispatcher.end();
 	SDL_Quit();
 }
 #endif
