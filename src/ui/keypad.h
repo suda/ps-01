@@ -1,12 +1,7 @@
 #pragma once
 
 #if defined(PARTICLE)
-  #include "Particle.h"
   #include "Adafruit_Trellis.h"
-#else
-  #include <stdint.h>
-  #include <stdio.h>
-  #include <SDL.h>
 #endif
 #include "ui.h"
 #include "store.h"

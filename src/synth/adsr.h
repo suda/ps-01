@@ -1,11 +1,4 @@
-#ifndef ADSR_H
-#define ADSR_H
-
 #pragma once
-
-#if defined(PARTICLE)
-#include "Particle.h"
-#endif
 
 #include "../util/types.h"
 
@@ -38,5 +31,3 @@ class ADSR {
         bool _gate = false;
         ADSRState _state = ADSR_IDLE;
 };
-
-#endif //ADSR_H

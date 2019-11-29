@@ -1,11 +1,5 @@
 #pragma once
 
-#if defined(PARTICLE)
-  #include "Particle.h"
-#else
-  #include <stdint.h>
-  #include <stdio.h>
-#endif
 #include "../util/types.h"
 
 // Action definitions

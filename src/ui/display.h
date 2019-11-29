@@ -6,10 +6,7 @@
 #if defined(PARTICLE)
   #include "Adafruit_GFX.h"
   #include "Adafruit_ILI9341.h"
-  #include "../util/types.h"
 #else
-  #include <stdio.h>
-  #include <string.h>
   #include "../../lib/Adafruit_SDL/Adafruit_SDL.h"
 #endif
 

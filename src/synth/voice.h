@@ -1,6 +1,3 @@
-#ifndef VOICE_H_
-#define VOICE_H_
-
 #pragma once
 
 #include "oscillator.h"
@@ -32,5 +29,3 @@ class Voice {
         uint64_t _clock = 0;
         Channel _channel = CH_BOTH;
 };
-
-#endif /* VOICE_H_ */

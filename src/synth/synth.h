@@ -1,15 +1,11 @@
-#ifndef SYNTH_H_
-#define SYNTH_H_
-
 #pragma once
 
+#include "../util/types.h"
 #if defined(PARTICLE)
-#include "Particle.h"
 #undef SCK
 #include "nrf_gpio.h"
 #include <nrfx_i2s.h>
 #else
-#include <stdio.h>
 #include <string.h>
 #include <SDL.h>
 #endif
@@ -58,5 +54,3 @@ private:
   void fillBuffer();
   int16_t getChannelSample(Channel channel);
 };
-
-#endif /* SYNTH_H_ */

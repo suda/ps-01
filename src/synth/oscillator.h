@@ -1,11 +1,4 @@
-#ifndef OSCILLATOR_H
-#define OSCILLATOR_H
-
 #pragma once
-
-#if defined(PARTICLE)
-#include "Particle.h"
-#endif
 
 #include "../util/types.h"
 #include "../vendor/frannor.h"
@@ -33,5 +26,3 @@ class Oscillator {
         void generateSawtoothWave();
         void generatePulseWave();
 };
-
-#endif //OSCILLATOR_H

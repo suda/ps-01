@@ -1,6 +1,3 @@
-#ifndef TYPES_H_
-#define TYPES_H_
-
 #pragma once
 
 #if defined(PARTICLE)
@@ -9,6 +6,9 @@
 #else
   #include <stdint.h>
   #include <stdio.h>
+  #include <string.h>
+  #include <stdlib.h>
+  #include <SDL.h>
   #define LOGGER(...) printf(__VA_ARGS__, "\n");
 #endif
 
@@ -112,5 +112,3 @@ typedef enum {
 #define BIT_CLEAR(a, b) ((a) &= ~(1ULL<<(b)))
 #define BIT_FLIP(a, b) ((a) ^= (1ULL<<(b)))
 #define BIT_CHECK(a, b) (!!((a) & (1ULL<<(b)))) 
-
-#endif /* TYPES_H_ */
