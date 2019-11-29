@@ -102,11 +102,6 @@ void Synth::fillBuffer() {
             voices[j].clock();
         }
     }
-#ifndef PARTICLE
-    fwrite(
-        usingSecondBuffer ? bufferA : bufferB,
-        BUFFER_SIZE * sizeof(int16_t), 1, writehandle);
-#endif
 }
 
 int16_t Synth::getChannelSample(Channel channel) {
@@ -119,6 +114,11 @@ int16_t Synth::getChannelSample(Channel channel) {
                 ? AMPLITUDE : sample + _voiceSample;
         }
     }
+#ifndef PARTICLE
+    fwrite(
+        &sample,
+        sizeof(int16_t), 1, writehandle);
+#endif
     return sample;
 }
 
