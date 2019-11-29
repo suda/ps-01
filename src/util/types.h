@@ -86,7 +86,7 @@ typedef enum {
 
 // Number of clock cycles for one milisecond
 #define ONE_MS          SAMPLERATE_HZ / 1000
-#define AMPLITUDE       ((1<<16)-1)
+#define AMPLITUDE       ((1<<15)-1)
 // #define AMPLITUDE       ((1<<12)-1)
 #define WAVE_TABLE_SIZE 256
 

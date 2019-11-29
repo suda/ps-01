@@ -18,9 +18,10 @@ public:
     static Synth s;
     return &s;
   }
-  void begin();
-
   Voice voices[VOICES_COUNT];
+
+  void begin();
+  void setupAllVoices(Waveform waveform, uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release, uint16_t pulseWidth);
   void debug();
 #ifndef PARTICLE
   void playBuffer();

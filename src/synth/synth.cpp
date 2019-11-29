@@ -4,11 +4,19 @@ Synth::Synth() {
 }
 
 void Synth::begin() {
-    voices[0].setFrequency(440.0);
     setupSoundOutput();
 #ifndef PARTICLE
     writehandle = fopen("audio.raw", "wb");
 #endif
+}
+
+void Synth::setupAllVoices(Waveform waveform, uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release, uint16_t pulseWidth) {
+    for (uint8_t i = 0; i < VOICES_COUNT; i++) {
+        voices[i].setWaveform(waveform);
+        voices[i].setADSR(attack, decay, sustain, release);
+        voices[i].setPulseWidth(pulseWidth);
+        voices[i].setGate(false);
+    }
 }
 
 void Synth::setupSoundOutput() {
