@@ -1,7 +1,6 @@
 #include "synth.h"
 
-Synth::Synth() {
-}
+Synth::Synth() {}
 
 void Synth::begin() {
     setupSoundOutput();
@@ -10,7 +9,9 @@ void Synth::begin() {
 #endif
 }
 
-void Synth::setupAllVoices(Waveform waveform, uint16_t attack, uint16_t decay, uint8_t sustain, uint16_t release, uint16_t pulseWidth) {
+void Synth::setupAllVoices(Waveform waveform, uint16_t attack, uint16_t decay,
+                           uint8_t sustain, uint16_t release,
+                           uint16_t pulseWidth) {
     for (uint8_t i = 0; i < VOICES_COUNT; i++) {
         voices[i].setWaveform(waveform);
         voices[i].setADSR(attack, decay, sustain, release);
@@ -36,11 +37,10 @@ void Synth::setupSoundOutput() {
         .sample_width = NRF_I2S_SWIDTH_16BIT,
         .channels = NRF_I2S_CHANNELS_STEREO,
         .mck_setup = I2S_MCK,
-        .ratio = I2S_RATIO
-    };
+        .ratio = I2S_RATIO};
 
-    i2sBuffersA.p_tx_buffer = (uint32_t*)bufferA;
-    i2sBuffersB.p_tx_buffer = (uint32_t*)bufferB;
+    i2sBuffersA.p_tx_buffer = (uint32_t *)bufferA;
+    i2sBuffersB.p_tx_buffer = (uint32_t *)bufferB;
 
     nrfx_i2s_init(&config, dataHandlerCb);
     nrfx_i2s_start(&i2sBuffersA, sizeof(bufferA) / sizeof(uint32_t), 0);
@@ -51,13 +51,13 @@ void Synth::setupSoundOutput() {
     /* Set the audio format */
     wanted.freq = SAMPLERATE_HZ;
     wanted.format = AUDIO_S16;
-    wanted.channels = 2;    /* 1 = mono, 2 = stereo */
+    wanted.channels = 2; /* 1 = mono, 2 = stereo */
     wanted.samples = BUFFER_SIZE;
     wanted.callback = audioCallback;
     wanted.userdata = NULL;
 
     /* Open the audio device, forcing the desired format */
-    if ( SDL_OpenAudio(&wanted, NULL) < 0 ) {
+    if (SDL_OpenAudio(&wanted, NULL) < 0) {
         fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
     }
 
@@ -68,13 +68,15 @@ void Synth::setupSoundOutput() {
 #ifdef PARTICLE
 void Synth::dataHandler(uint32_t status) {
     if (status == NRFX_I2S_STATUS_NEXT_BUFFERS_NEEDED) {
-        nrfx_i2s_next_buffers_set(usingSecondBuffer ? &i2sBuffersB : &i2sBuffersA);
+        nrfx_i2s_next_buffers_set(usingSecondBuffer ? &i2sBuffersB
+                                                    : &i2sBuffersA);
         usingSecondBuffer = !usingSecondBuffer;
         fillBuffer();
     }
 }
 
-void Synth::dataHandlerCb(nrfx_i2s_buffers_t const *p_released, uint32_t status) {
+void Synth::dataHandlerCb(nrfx_i2s_buffers_t const *p_released,
+                          uint32_t status) {
     auto self = Synth::instance();
     self->dataHandler(status);
 }
@@ -83,7 +85,7 @@ void Synth::audioCallback(void *userdata, Uint8 *stream, int len) {
     auto self = Synth::instance();
     self->fillBuffer();
     // SDL_MixAudio(stream, (Uint8 *)&self->bufferB, len, SDL_MIX_MAXVOLUME);
-    SDL_memcpy (stream, (Uint8 *)&self->bufferB, len);
+    SDL_memcpy(stream, (Uint8 *)&self->bufferB, len);
 }
 #endif
 
@@ -91,11 +93,11 @@ void Synth::fillBuffer() {
     for (uint16_t i = 0; i < BUFFER_SIZE; i++) {
         // Fill the correct buffer with correct channels
         if (usingSecondBuffer) {
-            bufferA[i*2] = getChannelSample(CH_LEFT);
-            bufferA[i*2+1] = getChannelSample(CH_RIGHT);
+            bufferA[i * 2] = getChannelSample(CH_LEFT);
+            bufferA[i * 2 + 1] = getChannelSample(CH_RIGHT);
         } else {
-            bufferB[i*2] = getChannelSample(CH_LEFT);
-            bufferB[i*2+1] = getChannelSample(CH_RIGHT);
+            bufferB[i * 2] = getChannelSample(CH_LEFT);
+            bufferB[i * 2 + 1] = getChannelSample(CH_RIGHT);
         }
         // Clock all the voices
         for (uint8_t j = 0; j < VOICES_COUNT; j++) {
@@ -110,14 +112,12 @@ int16_t Synth::getChannelSample(Channel channel) {
         if (voices[i].isAudibleInChannel(channel)) {
             int16_t _voiceSample = voices[i].getSample();
             // Trim sample to maximum volume
-            sample = sample + _voiceSample > AMPLITUDE
-                ? AMPLITUDE : sample + _voiceSample;
+            sample = sample + _voiceSample > AMPLITUDE ? AMPLITUDE
+                                                       : sample + _voiceSample;
         }
     }
 #ifndef PARTICLE
-    fwrite(
-        &sample,
-        sizeof(int16_t), 1, writehandle);
+    fwrite(&sample, sizeof(int16_t), 1, writehandle);
 #endif
     return sample;
 }

@@ -11,9 +11,7 @@ void Dispatcher::begin() {
 
 void Dispatcher::update() {}
 
-void Dispatcher::end() {
-    display.end();
-}
+void Dispatcher::end() { display.end(); }
 
 void Dispatcher::dispatchAction(uint8_t action, int16_t args[]) {
     // scaleTestView.handleAction(action, args);

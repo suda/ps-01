@@ -1,49 +1,49 @@
 #include "scale_test_view.h"
 
-float scale[] = { C4_HZ, D4_HZ, E4_HZ, F4_HZ, G4_HZ, A4_HZ, B4_HZ, C5_HZ };
+float scale[] = {C4_HZ, D4_HZ, E4_HZ, F4_HZ, G4_HZ, A4_HZ, B4_HZ, C5_HZ};
 
-ScaleTestView::ScaleTestView(): View() {}
+ScaleTestView::ScaleTestView() : View() {}
 
 void ScaleTestView::handleAction(uint8_t action, int16_t args[]) {
-    switch (action)
-    {
-    case ACTION_VIEW_INIT:
-        init();
-        break;
+    switch (action) {
+        case ACTION_VIEW_INIT:
+            init();
+            break;
 
-    case ACTION_TICK:
-        if (args[0] - _store->stLastTick > 1000) {
-            _store->stLastTick = args[0];
-            NO_ARGS(args)
-            handleAction(ACTION_ST_NEXT, args);
-        }
-        break;
-
-    case ACTION_ST_NEXT:
-        _store->stCurrentNote++;
-        if (_store->stCurrentNote > 7) {
-            _store->stCurrentNote = 0;
-        }
-
-        handleStoreUpdate(STORE_ST_CURRENT_NOTE);
-        break;
-
-    case ACTION_ENCODER_CHANGE:
-        if (args[0] == ENCODER_BLUE) {
-            _store->stCurrentWaveform = (Waveform)((uint8_t)_store->stCurrentWaveform + args[1]);
-
-            if (_store->stCurrentWaveform == WF_TEST) {
-                _store->stCurrentWaveform = WF_TRIANGLE;
+        case ACTION_TICK:
+            if (args[0] - _store->stLastTick > 1000) {
+                _store->stLastTick = args[0];
+                NO_ARGS(args)
+                handleAction(ACTION_ST_NEXT, args);
             }
-            if (_store->stCurrentWaveform == WF_NOISE) {
-                _store->stCurrentWaveform = WF_PULSE;
+            break;
+
+        case ACTION_ST_NEXT:
+            _store->stCurrentNote++;
+            if (_store->stCurrentNote > 7) {
+                _store->stCurrentNote = 0;
             }
-            handleStoreUpdate(STORE_ST_CURRENT_WAVE);
-        }
-        break;
-    
-    default:
-        break;
+
+            handleStoreUpdate(STORE_ST_CURRENT_NOTE);
+            break;
+
+        case ACTION_ENCODER_CHANGE:
+            if (args[0] == ENCODER_BLUE) {
+                _store->stCurrentWaveform =
+                    (Waveform)((uint8_t)_store->stCurrentWaveform + args[1]);
+
+                if (_store->stCurrentWaveform == WF_TEST) {
+                    _store->stCurrentWaveform = WF_TRIANGLE;
+                }
+                if (_store->stCurrentWaveform == WF_NOISE) {
+                    _store->stCurrentWaveform = WF_PULSE;
+                }
+                handleStoreUpdate(STORE_ST_CURRENT_WAVE);
+            }
+            break;
+
+        default:
+            break;
     }
 }
 void ScaleTestView::init() {
@@ -64,7 +64,7 @@ void ScaleTestView::init() {
     // Init synth
     Synth::instance()->voices[0].setPulseWidth((1 << 15));
     Synth::instance()->voices[0].setADSR(200, 200, 1 << 6, 500);
-    
+
     handleStoreUpdate(STORE_ST_CURRENT_NOTE);
     handleStoreUpdate(STORE_ST_CURRENT_WAVE);
     Synth::instance()->voices[0].setGate(true);
@@ -87,26 +87,26 @@ void ScaleTestView::handleStoreUpdate(uint8_t storeKey) {
 void ScaleTestView::drawKeys() {
     _display.tft.fillRect(x, y, width, height, COLOR_WHITE);
     _display.tft.fillRect(x, y - CORNER_SIZE, width, CORNER_SIZE, COLOR_BLACK);
-    _display.tft.fillRect(x - CORNER_SIZE, y, CORNER_SIZE, height - CORNER_SIZE, COLOR_BLACK);
-    _display.tft.fillRect(x, y + height - CORNER_SIZE, width, CORNER_SIZE, COLOR_BLACK);
-    _display.tft.fillRect(x + width, y, CORNER_SIZE, height - CORNER_SIZE, COLOR_BLACK);
+    _display.tft.fillRect(x - CORNER_SIZE, y, CORNER_SIZE, height - CORNER_SIZE,
+                          COLOR_BLACK);
+    _display.tft.fillRect(x, y + height - CORNER_SIZE, width, CORNER_SIZE,
+                          COLOR_BLACK);
+    _display.tft.fillRect(x + width, y, CORNER_SIZE, height - CORNER_SIZE,
+                          COLOR_BLACK);
 
-    for (uint8_t i=0; i<keys+1; i++) {
+    for (uint8_t i = 0; i < keys + 1; i++) {
         _display.tft.drawFastVLine(x + (keyWidth * i), y, height, COLOR_BLACK);
         uint8_t j = i + 6;
-        if ((j % 7 != 0) && ((j+4) % 7 != 0)) {
-            _display.tft.fillRect(x + (keyWidth * i) - CORNER_SIZE, y, CORNER_SIZE * 2, 30, COLOR_BLACK);
+        if ((j % 7 != 0) && ((j + 4) % 7 != 0)) {
+            _display.tft.fillRect(x + (keyWidth * i) - CORNER_SIZE, y,
+                                  CORNER_SIZE * 2, 30, COLOR_BLACK);
         }
     }
 }
 
 void ScaleTestView::drawKey(uint8_t key, uint16_t color) {
-    _display.tft.fillCircle(
-        x + (keyWidth * (key + 1)) + 9,
-        y + height - 14,
-        4,
-        color
-    );
+    _display.tft.fillCircle(x + (keyWidth * (key + 1)) + 9, y + height - 14, 4,
+                            color);
 }
 
 void ScaleTestView::drawWaveforms() {
@@ -118,14 +118,16 @@ void ScaleTestView::drawWaveforms() {
     // _display.tft.fillRect(x, y2, 2, height2, COLOR_BLACK);
     // _display.tft.fillRect(x, y2, height2, 2, COLOR_BLACK);
     // _display.tft.fillRect(x + height2 - 2, y2, 2, height2, COLOR_BLACK);
-    // _display.tft.fillRect(x + height2 - 2, y2 + height2 - 2, height2, 2, COLOR_BLACK);
-    // _display.tft.fillRect(x + (height2 * 2) - 4, y2, 2, height2, COLOR_BLACK);
+    // _display.tft.fillRect(x + height2 - 2, y2 + height2 - 2, height2, 2,
+    // COLOR_BLACK); _display.tft.fillRect(x + (height2 * 2) - 4, y2, 2,
+    // height2, COLOR_BLACK);
     _display.drawButton(x2 - 8, y2 - 4, 40, 16, COLOR_GRAY, COLOR_GRAY_SHADOW);
     _display.tft.drawFastVLine(x2, y2, height2 / 2 + 1, COLOR_WHITE);
     _display.tft.drawFastHLine(x2, y2, 12, COLOR_WHITE);
     _display.tft.drawFastVLine(x2 + 12 - 1, y2, height2, COLOR_WHITE);
     _display.tft.drawFastHLine(x2 + 12 - 1, y2 + height2 - 1, 12, COLOR_WHITE);
-    _display.tft.drawFastVLine(x2 + (12 * 2) - 2, y2 + (height2 / 2), height2 / 2 + 1, COLOR_WHITE);
+    _display.tft.drawFastVLine(x2 + (12 * 2) - 2, y2 + (height2 / 2),
+                               height2 / 2 + 1, COLOR_WHITE);
 
     // Saw
     x2 += 60;
@@ -133,32 +135,44 @@ void ScaleTestView::drawWaveforms() {
     x2 -= 1;
     _display.tft.drawLine(x2, y2 + height2 - 1, x2 + (12) - 1, y2, COLOR_WHITE);
     _display.tft.drawFastVLine(x2 + 12, y2, height2 + 1, COLOR_WHITE);
-    _display.tft.drawLine(x2 + 12 , y2 + height2 - 1, x2 + (12 * 2) - 0, y2, COLOR_WHITE);
+    _display.tft.drawLine(x2 + 12, y2 + height2 - 1, x2 + (12 * 2) - 0, y2,
+                          COLOR_WHITE);
     _display.tft.drawFastVLine(x2 + (12 * 2) + 1, y2, height2 + 1, COLOR_WHITE);
-    // _display.tft.drawLine(x2, y2, x2 + height2 - 1, y2 + height2 - 1, COLOR_BLACK);
-    // _display.tft.drawLine(x2, y2 + height2 - 1, x2 + height2 - 1, y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + 1, y2 + height2 - 1, x2 + height2 , y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + 2, y2 + height2 - 1, x2 + height2 + 1, y2, COLOR_BLACK);
-    // _display.tft.fillRect(x2 + height2, y2, 2, height2, COLOR_BLACK);
+    // _display.tft.drawLine(x2, y2, x2 + height2 - 1, y2 + height2 - 1,
+    // COLOR_BLACK); _display.tft.drawLine(x2, y2 + height2 - 1, x2 + height2 -
+    // 1, y2, COLOR_BLACK); _display.tft.drawLine(x2 + 1, y2 + height2 - 1, x2 +
+    // height2 , y2, COLOR_BLACK); _display.tft.drawLine(x2 + 2, y2 + height2 -
+    // 1, x2 + height2 + 1, y2, COLOR_BLACK); _display.tft.fillRect(x2 +
+    // height2, y2, 2, height2, COLOR_BLACK);
 
-    // _display.tft.drawLine(x2 + height2, y2 + height2 - 1, x2 + (height2 * 2) - 1, y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + height2 + 1, y2 + height2 - 1, x2 + (height2 * 2) , y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + height2 + 2, y2 + height2 - 1, x2 + (height2 * 2) + 1, y2, COLOR_BLACK);
-    // _display.tft.fillRect(x2 + height2 + height2, y2, 2, height2, COLOR_BLACK);
+    // _display.tft.drawLine(x2 + height2, y2 + height2 - 1, x2 + (height2 * 2)
+    // - 1, y2, COLOR_BLACK); _display.tft.drawLine(x2 + height2 + 1, y2 +
+    // height2 - 1, x2 + (height2 * 2) , y2, COLOR_BLACK);
+    // _display.tft.drawLine(x2 + height2 + 2, y2 + height2 - 1, x2 + (height2 *
+    // 2) + 1, y2, COLOR_BLACK); _display.tft.fillRect(x2 + height2 + height2,
+    // y2, 2, height2, COLOR_BLACK);
 
     // Triangle
     x2 += 61;
-    _display.drawButton(x2 - 8, y2 - 4, 40, 16, COLOR_GREEN, COLOR_GREEN_SHADOW);
-    _display.tft.drawLine(x2, y2 + height2 - 1, x2 + height2 - 1, y2, COLOR_WHITE);
-    _display.tft.drawLine(x2 + height2 - 1, y2, x2 + (height2 * 2) - 1 - 1, y2 + height2 - 1, COLOR_WHITE);
-    _display.tft.drawLine(x2 + (height2 * 2) - 2, y2 + height2 - 1, x2 + (height2 * 3) - 3, y2, COLOR_WHITE);
-    // _display.tft.drawLine(x2 + height2 - 1, y2, x2 + (height2 * 2) - 1 - 1, y2 + height2 - 1, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + 1, y2 + height2 - 1, x2 + height2 , y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2, y2 + height2 - 1, x2 + height2 - 1, y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + 1, y2 + height2 - 1, x2 + height2 , y2, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + 2, y2 + height2 - 1, x2 + height2 + 1, y2, COLOR_BLACK);
+    _display.drawButton(x2 - 8, y2 - 4, 40, 16, COLOR_GREEN,
+                        COLOR_GREEN_SHADOW);
+    _display.tft.drawLine(x2, y2 + height2 - 1, x2 + height2 - 1, y2,
+                          COLOR_WHITE);
+    _display.tft.drawLine(x2 + height2 - 1, y2, x2 + (height2 * 2) - 1 - 1,
+                          y2 + height2 - 1, COLOR_WHITE);
+    _display.tft.drawLine(x2 + (height2 * 2) - 2, y2 + height2 - 1,
+                          x2 + (height2 * 3) - 3, y2, COLOR_WHITE);
+    // _display.tft.drawLine(x2 + height2 - 1, y2, x2 + (height2 * 2) - 1 - 1,
+    // y2 + height2 - 1, COLOR_BLACK); _display.tft.drawLine(x2 + 1, y2 +
+    // height2 - 1, x2 + height2 , y2, COLOR_BLACK); _display.tft.drawLine(x2,
+    // y2 + height2 - 1, x2 + height2 - 1, y2, COLOR_BLACK);
+    // _display.tft.drawLine(x2 + 1, y2 + height2 - 1, x2 + height2 , y2,
+    // COLOR_BLACK); _display.tft.drawLine(x2 + 2, y2 + height2 - 1, x2 +
+    // height2 + 1, y2, COLOR_BLACK);
 
-    // _display.tft.drawLine(x2 + height2 - 1, y2, x2 + (height2 * 2) - 1 - 1, y2 + height2 - 1, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + height2 + 1 - 1, y2, x2 + (height2 * 2)  - 1, y2 + height2 - 1, COLOR_BLACK);
-    // _display.tft.drawLine(x2 + height2 + 2 - 1, y2, x2 + (height2 * 2) + 1 - 1, y2 + height2 - 1, COLOR_BLACK);
+    // _display.tft.drawLine(x2 + height2 - 1, y2, x2 + (height2 * 2) - 1 - 1,
+    // y2 + height2 - 1, COLOR_BLACK); _display.tft.drawLine(x2 + height2 + 1 -
+    // 1, y2, x2 + (height2 * 2)  - 1, y2 + height2 - 1, COLOR_BLACK);
+    // _display.tft.drawLine(x2 + height2 + 2 - 1, y2, x2 + (height2 * 2) + 1 -
+    // 1, y2 + height2 - 1, COLOR_BLACK);
 }

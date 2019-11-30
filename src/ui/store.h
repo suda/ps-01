@@ -10,7 +10,8 @@
 #define ACTION_ENCODER_CHANGE 12
 #define ACTION_ST_NEXT        20
 // Args macros
-#define MK_ARGS(name, arg0, arg1, arg2, arg3) int16_t name[] = {arg0, arg1, arg2, arg3};
+#define MK_ARGS(name, arg0, arg1, arg2, arg3) \
+    int16_t name[] = {arg0, arg1, arg2, arg3};
 #define NO_ARGS(name) MK_ARGS(name, 0, 0, 0, 0)
 // Store value change
 #define STORE_ST_CURRENT_NOTE 1

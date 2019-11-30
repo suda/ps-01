@@ -3,10 +3,10 @@
 // #endif
 #include "util/types.h"
 #if defined(PARTICLE)
-#include "Particle.h"
 #include "PCF8574.h"
+#include "Particle.h"
 SYSTEM_MODE(MANUAL);
-SerialLogHandler dbg(LOG_LEVEL_NONE, { {"app", LOG_LEVEL_ALL} });
+SerialLogHandler dbg(LOG_LEVEL_NONE, {{"app", LOG_LEVEL_ALL}});
 
 // Encoders
 void encoderInterrupt();
@@ -43,24 +43,18 @@ void setupPCF(PCF8574 *pcf) {
     pcf->begin();
 }
 
-void encoderInterrupt() {
-    encoderUpdated = true;
-}
+void encoderInterrupt() { encoderUpdated = true; }
 
-void buttonInterrupt() {
-    buttonUpdated = true;
-}
+void buttonInterrupt() { buttonUpdated = true; }
 
-void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB, uint8_t step=1) {
+void calculateKnobPosition(uint8_t knob, uint8_t pinA, uint8_t pinB,
+                           uint8_t step = 1) {
     uint8_t newState = state[knob] & 3;
     lastPosition[knob] = position[knob];
-    if (pinA)
-        newState |= 4;
-    if (pinB)
-        newState |= 8;
+    if (pinA) newState |= 4;
+    if (pinB) newState |= 8;
     state[knob] = (newState >> 2);
-    switch (newState)
-    {
+    switch (newState) {
         case 1:
         case 7:
         case 8:
@@ -124,7 +118,7 @@ void loop() {
     Synth::instance()->voices[0].setFrequency(C4_HZ);
     uint16_t maxPW = (1 << 16) / 1 - 1;
     uint16_t steps = 16;
-    for (uint16_t i = 0; i < maxPW; i+=maxPW / steps) {
+    for (uint16_t i = 0; i < maxPW; i += maxPW / steps) {
         Log.trace("Fill %.0f%% %i", float(i) / maxPW * 100, i);
         // printf("Fill %.0f%% %i\n", float(i) / maxPW * 100, i);
         Synth::instance()->voices[0].setPulseWidth(i);
@@ -147,13 +141,14 @@ void loop() {
 #endif
 
 #ifdef TRELLIS
-float scale[] = { C4_HZ, C4S_HZ, D4_HZ, D4S_HZ, E4_HZ, F4_HZ, F4S_HZ, G4_HZ, G4S_HZ, A4_HZ, A4S_HZ, B4_HZ };
+float scale[] = {C4_HZ,  C4S_HZ, D4_HZ,  D4S_HZ, E4_HZ,  F4_HZ,
+                 F4S_HZ, G4_HZ,  G4S_HZ, A4_HZ,  A4S_HZ, B4_HZ};
 
 void loop() {
 #if defined(PARTICLE)
     // delay(30);
     keypad.loop();
-    
+
     if (encoderUpdated) {
         PCF8574::DigitalInput input = encoders.digitalReadAll();
 
@@ -168,16 +163,13 @@ void loop() {
         position[2] = max(min(position[2], 2 << 8), 0);
         position[3] = max(min(position[3], 2 << 16), 0);
 
-        Serial.printf(
-            "Attack:%4d | Decay:%4d | Sustain:%4d | Release:%4d\r",
-            position[0],
-            position[1],
-            position[2],
-            position[3]
-        );
-        
-        Synth::instance()->voices[0].setADSR(position[0], position[1], position[2], position[3]);
-        // drawKnobPositions(position[0], position[1], position[2], position[3]);
+        Serial.printf("Attack:%4d | Decay:%4d | Sustain:%4d | Release:%4d\r",
+                      position[0], position[1], position[2], position[3]);
+
+        Synth::instance()->voices[0].setADSR(position[0], position[1],
+                                             position[2], position[3]);
+        // drawKnobPositions(position[0], position[1], position[2],
+        // position[3]);
         encoderUpdated = false;
     }
 
@@ -188,9 +180,9 @@ void loop() {
 
     if (buttonUpdated) {
         PCF8574::DigitalInput input = buttons.digitalReadAll();
-        Serial.printf("Buttons: %d %d %d %d %d %d %d %d\r", 
-            input.p0, input.p1, input.p2, input.p3,
-            input.p4, input.p5, input.p6, input.p7);
+        Serial.printf("Buttons: %d %d %d %d %d %d %d %d\r", input.p0, input.p1,
+                      input.p2, input.p3, input.p4, input.p5, input.p6,
+                      input.p7);
         buttonUpdated = false;
     }
 
@@ -216,7 +208,7 @@ int main(int argc, char **argv) {
     while (keep_window_open) {
         SDL_Event e;
         while (SDL_PollEvent(&e) > 0) {
-            switch(e.type) {
+            switch (e.type) {
                 case SDL_QUIT:
                     keep_window_open = false;
                     break;
@@ -230,6 +222,6 @@ int main(int argc, char **argv) {
         SDL_Delay(10);
     }
     dispatcher.end();
-	SDL_Quit();
+    SDL_Quit();
 }
 #endif

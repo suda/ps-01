@@ -1,12 +1,8 @@
 #include "adsr.h"
 
-ADSR::ADSR() {
-    _oneMSf = float(ONE_MS);
-}
+ADSR::ADSR() { _oneMSf = float(ONE_MS); }
 
-void ADSR::setAttack(uint16_t attack) {
-    _attack = attack;
-}
+void ADSR::setAttack(uint16_t attack) { _attack = attack; }
 
 void ADSR::setDecay(uint16_t decay) {
     _decay = decay;
@@ -65,13 +61,16 @@ int16_t ADSR::apply(int16_t sample) {
             sample *= float(_clock) / float(_attack) / _oneMSf;
             break;
         case ADSR_DECAY:
-            sample *= _sustainInvf * (_decayOneMSf - _clock) / _decayf / _oneMSf + _sustainf;
+            sample *=
+                _sustainInvf * (_decayOneMSf - _clock) / _decayf / _oneMSf +
+                _sustainf;
             break;
         case ADSR_SUSTAIN:
             sample *= _sustainf;
             break;
         case ADSR_RELEASE:
-            sample *= _sustainf * (_releaseOneMSf - _clock) / _releasef / _oneMSf;
+            sample *=
+                _sustainf * (_releaseOneMSf - _clock) / _releasef / _oneMSf;
             break;
         default:
             return 0;

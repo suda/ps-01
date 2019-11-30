@@ -13,9 +13,7 @@ Keypad::Keypad() {
 #endif
 }
 
-void Keypad::begin(Dispatcher &dispatcher) {
-    this->_dispatcher = &dispatcher;
-}
+void Keypad::begin(Dispatcher &dispatcher) { this->_dispatcher = &dispatcher; }
 
 void Keypad::updateLight(uint8_t light, bool state) {
 #if defined(PARTICLE)
@@ -29,16 +27,14 @@ void Keypad::_interruptCb() {
     self->_interrupt();
 }
 
-void Keypad::_interrupt() {
-    _updated = true;
-}
+void Keypad::_interrupt() { _updated = true; }
 
 void Keypad::loop() {
     if (_updated) {
         if (_trellis.readSwitches()) {
             bool keypadChanged = false;
             bool anyKeyPressed = false;
-            for (uint8_t i=0; i<16; i++) {
+            for (uint8_t i = 0; i < 16; i++) {
                 bool state = _trellis.isKeyPressed(i);
                 anyKeyPressed |= state;
                 if (state != BIT_CHECK(_state, i)) {
@@ -52,7 +48,7 @@ void Keypad::loop() {
                     }
                 }
             }
-            
+
             if (keypadChanged) {
                 _trellis.writeDisplay();
             }
@@ -91,73 +87,73 @@ void Keypad::handleKey(SDL_Event &event) {
         [Esc] Back
     */
     int16_t key;
-    switch (event.key.keysym.scancode)
-    {
-    // Keypad
-    case SDL_SCANCODE_1:
-        key = KEYPAD_1;
-        break;
-    case SDL_SCANCODE_2:
-        key = KEYPAD_2;
-        break;
-    case SDL_SCANCODE_3:
-        key = KEYPAD_3;
-        break;
-    case SDL_SCANCODE_4:
-        key = KEYPAD_4;
-        break;
-    case SDL_SCANCODE_Q:
-        key = KEYPAD_5;
-        break;
-    case SDL_SCANCODE_W:
-        key = KEYPAD_6;
-        break;
-    case SDL_SCANCODE_E:
-        key = KEYPAD_7;
-        break;
-    case SDL_SCANCODE_R:
-        key = KEYPAD_8;
-        break;
-    case SDL_SCANCODE_A:
-        key = KEYPAD_9;
-        break;
-    case SDL_SCANCODE_S:
-        key = KEYPAD_10;
-        break;
-    case SDL_SCANCODE_D:
-        key = KEYPAD_11;
-        break;
-    case SDL_SCANCODE_F:
-        key = KEYPAD_12;
-        break;
-    case SDL_SCANCODE_Z:
-        key = KEYPAD_13;
-        break;
-    case SDL_SCANCODE_X:
-        key = KEYPAD_14;
-        break;
-    case SDL_SCANCODE_C:
-        key = KEYPAD_15;
-        break;
-    case SDL_SCANCODE_V:
-        key = KEYPAD_16;
-        break;
-    // Other keys
-    case SDL_SCANCODE_ESCAPE:
-        key = KEY_BACK;
-        break;
-    case SDL_SCANCODE_MINUS:
-        key = KEY_VOL_MINUS;
-        break;
-    case SDL_SCANCODE_EQUALS:
-        key = KEY_VOL_PLUS;
-        break;
-    default:
-        break;
+    switch (event.key.keysym.scancode) {
+        // Keypad
+        case SDL_SCANCODE_1:
+            key = KEYPAD_1;
+            break;
+        case SDL_SCANCODE_2:
+            key = KEYPAD_2;
+            break;
+        case SDL_SCANCODE_3:
+            key = KEYPAD_3;
+            break;
+        case SDL_SCANCODE_4:
+            key = KEYPAD_4;
+            break;
+        case SDL_SCANCODE_Q:
+            key = KEYPAD_5;
+            break;
+        case SDL_SCANCODE_W:
+            key = KEYPAD_6;
+            break;
+        case SDL_SCANCODE_E:
+            key = KEYPAD_7;
+            break;
+        case SDL_SCANCODE_R:
+            key = KEYPAD_8;
+            break;
+        case SDL_SCANCODE_A:
+            key = KEYPAD_9;
+            break;
+        case SDL_SCANCODE_S:
+            key = KEYPAD_10;
+            break;
+        case SDL_SCANCODE_D:
+            key = KEYPAD_11;
+            break;
+        case SDL_SCANCODE_F:
+            key = KEYPAD_12;
+            break;
+        case SDL_SCANCODE_Z:
+            key = KEYPAD_13;
+            break;
+        case SDL_SCANCODE_X:
+            key = KEYPAD_14;
+            break;
+        case SDL_SCANCODE_C:
+            key = KEYPAD_15;
+            break;
+        case SDL_SCANCODE_V:
+            key = KEYPAD_16;
+            break;
+        // Other keys
+        case SDL_SCANCODE_ESCAPE:
+            key = KEY_BACK;
+            break;
+        case SDL_SCANCODE_MINUS:
+            key = KEY_VOL_MINUS;
+            break;
+        case SDL_SCANCODE_EQUALS:
+            key = KEY_VOL_PLUS;
+            break;
+        default:
+            break;
     }
 
     if (key) {
-        uint8_t action = event.type == SDL_KEYDOWN ? ACTION_KEY_DOWN : ACTION_KEY_UP;
+        uint8_t action =
+            event.type == SDL_KEYDOWN ? ACTION_KEY_DOWN : ACTION_KEY_UP;
         MK_ARGS(args, key, 0, 0, 0)
         _dispatcher->dispatchAction(action, args);
         return;
@@ -166,49 +162,49 @@ void Keypad::handleKey(SDL_Event &event) {
         return;
     }
     int16_t encoder, change;
-    switch (event.key.keysym.scancode)
-    {
-    case SDL_SCANCODE_9:
-        encoder = ENCODER_BLUE;
-        change = -1;
-        break;
-    case SDL_SCANCODE_0:
-        encoder = ENCODER_BLUE;
-        change = 1;
-        break;
-    case SDL_SCANCODE_O:
-        encoder = ENCODER_GREEN;
-        change = -1;
-        break;
-    case SDL_SCANCODE_P:
-        encoder = ENCODER_GREEN;
-        change = 1;
-        break;
-    case SDL_SCANCODE_L:
-        encoder = ENCODER_PURPLE;
-        change = -1;
-        break;
-    case SDL_SCANCODE_SEMICOLON:
-        encoder = ENCODER_PURPLE;
-        change = 1;
-        break;
-    case SDL_SCANCODE_PERIOD:
-        encoder = ENCODER_RED;
-        change = -1;
-        break;
-    case SDL_SCANCODE_SLASH:
-        encoder = ENCODER_RED;
-        change = 1;
-        break;
-    default:
-        break;
+    switch (event.key.keysym.scancode) {
+        case SDL_SCANCODE_9:
+            encoder = ENCODER_BLUE;
+            change = -1;
+            break;
+        case SDL_SCANCODE_0:
+            encoder = ENCODER_BLUE;
+            change = 1;
+            break;
+        case SDL_SCANCODE_O:
+            encoder = ENCODER_GREEN;
+            change = -1;
+            break;
+        case SDL_SCANCODE_P:
+            encoder = ENCODER_GREEN;
+            change = 1;
+            break;
+        case SDL_SCANCODE_L:
+            encoder = ENCODER_PURPLE;
+            change = -1;
+            break;
+        case SDL_SCANCODE_SEMICOLON:
+            encoder = ENCODER_PURPLE;
+            change = 1;
+            break;
+        case SDL_SCANCODE_PERIOD:
+            encoder = ENCODER_RED;
+            change = -1;
+            break;
+        case SDL_SCANCODE_SLASH:
+            encoder = ENCODER_RED;
+            change = 1;
+            break;
+        default:
+            break;
     }
     if (encoder) {
         MK_ARGS(args, encoder, change, 0, 0)
         _dispatcher->dispatchAction(ACTION_ENCODER_CHANGE, args);
         return;
     }
-    
-    printf("Key not mapped: %s\n", SDL_GetScancodeName(event.key.keysym.scancode));
+
+    printf("Key not mapped: %s\n",
+           SDL_GetScancodeName(event.key.keysym.scancode));
 }
 #endif
