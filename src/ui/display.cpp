@@ -149,3 +149,27 @@ void Display::drawKnobPositions(uint16_t attack, uint16_t decay,
     tft.setTextColor(COLOR_RED);
     tft.print(release);
 }
+
+void Display::drawKeys(uint16_t x, uint16_t y, uint16_t width,
+                       uint16_t height, uint8_t keyWidth, uint8_t keys) {
+    tft.fillRect(x, y, width, height, COLOR_WHITE);
+    tft.fillRect(x, y - CORNER_SIZE, width, CORNER_SIZE, COLOR_BLACK);
+    tft.fillRect(x - CORNER_SIZE, y, CORNER_SIZE, height - CORNER_SIZE,
+                 COLOR_BLACK);
+    tft.fillRect(x, y + height - CORNER_SIZE, width, CORNER_SIZE, COLOR_BLACK);
+    tft.fillRect(x + width, y, CORNER_SIZE, height - CORNER_SIZE, COLOR_BLACK);
+
+    for (uint8_t i = 0; i < keys + 1; i++) {
+        tft.drawFastVLine(x + (keyWidth * i), y, height, COLOR_BLACK);
+        uint8_t j = i + 6;
+        if ((j % 7 != 0) && ((j + 4) % 7 != 0)) {
+            tft.fillRect(x + (keyWidth * i) - CORNER_SIZE, y, CORNER_SIZE * 2,
+                         30, COLOR_BLACK);
+        }
+    }
+}
+
+void Display::drawKey(uint16_t x, uint16_t y, uint16_t height, uint8_t keyWidth, uint8_t key,
+                      uint16_t color) {
+    tft.fillCircle(x + (keyWidth * (key + 1)) + 9, y + height - 14, 4, color);
+}

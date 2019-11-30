@@ -58,7 +58,7 @@ void ScaleTestView::init() {
     _display.clearScreen();
     _display.drawDialog();
     _display.drawTabs();
-    drawKeys();
+    _display.drawKeys(x, y, width, height, keyWidth, keys);
     drawWaveforms();
     _display.update();
     // Init synth
@@ -74,39 +74,14 @@ void ScaleTestView::handleStoreUpdate(uint8_t storeKey) {
     if (storeKey == STORE_ST_CURRENT_NOTE) {
         Synth::instance()->voices[0].setFrequency(scale[_store->stCurrentNote]);
         // Redraw the previous one...
-        drawKey(_previousStore->stCurrentNote, COLOR_WHITE);
+        _display.drawKey(x, y, height, keyWidth, _previousStore->stCurrentNote, COLOR_WHITE);
         // ...and draw the current one
-        drawKey(_store->stCurrentNote, COLOR_BLUE);
+        _display.drawKey(x, y, height, keyWidth, _store->stCurrentNote, COLOR_BLUE);
         _display.update();
     }
     if (storeKey == STORE_ST_CURRENT_WAVE) {
         Synth::instance()->voices[0].setWaveform(_store->stCurrentWaveform);
     }
-}
-
-void ScaleTestView::drawKeys() {
-    _display.tft.fillRect(x, y, width, height, COLOR_WHITE);
-    _display.tft.fillRect(x, y - CORNER_SIZE, width, CORNER_SIZE, COLOR_BLACK);
-    _display.tft.fillRect(x - CORNER_SIZE, y, CORNER_SIZE, height - CORNER_SIZE,
-                          COLOR_BLACK);
-    _display.tft.fillRect(x, y + height - CORNER_SIZE, width, CORNER_SIZE,
-                          COLOR_BLACK);
-    _display.tft.fillRect(x + width, y, CORNER_SIZE, height - CORNER_SIZE,
-                          COLOR_BLACK);
-
-    for (uint8_t i = 0; i < keys + 1; i++) {
-        _display.tft.drawFastVLine(x + (keyWidth * i), y, height, COLOR_BLACK);
-        uint8_t j = i + 6;
-        if ((j % 7 != 0) && ((j + 4) % 7 != 0)) {
-            _display.tft.fillRect(x + (keyWidth * i) - CORNER_SIZE, y,
-                                  CORNER_SIZE * 2, 30, COLOR_BLACK);
-        }
-    }
-}
-
-void ScaleTestView::drawKey(uint8_t key, uint16_t color) {
-    _display.tft.fillCircle(x + (keyWidth * (key + 1)) + 9, y + height - 14, 4,
-                            color);
 }
 
 void ScaleTestView::drawWaveforms() {

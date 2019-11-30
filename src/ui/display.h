@@ -24,6 +24,8 @@ class Display {
                     uint16_t color, uint16_t shadowColor);
     void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain,
                            uint16_t release);
+    void drawKeys(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t keyWidth, uint8_t keys);
+    void drawKey(uint16_t x, uint16_t y, uint16_t height, uint8_t keyWidth, uint8_t key, uint16_t color);
 
 #if defined(PARTICLE)
     Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_RST);
