@@ -64,24 +64,40 @@ void Display::drawDialog() {
                  w - (CORNER_SIZE * 4), CORNER_SIZE, COLOR_DIALOG_SHADOW);
 }
 
-void Display::drawTab(uint16_t x, uint16_t color, uint16_t shadowColor) {
-    tft.fillRect(x, 214 + (CORNER_SIZE * 2), 72, 18, color);
-    tft.fillRect(x + CORNER_SIZE, 214 + CORNER_SIZE, 72 - (CORNER_SIZE * 2),
+void Display::drawTab(uint16_t x, String label, uint16_t color, uint16_t shadowColor) {
+    const uint16_t tabWidth = 72;
+    tft.fillRect(x, 214 + (CORNER_SIZE * 2), tabWidth, 18, color);
+    tft.fillRect(x + CORNER_SIZE, 214 + CORNER_SIZE, tabWidth - (CORNER_SIZE * 2),
                  CORNER_SIZE, color);
 
     // Shadow
     tft.fillRect(x, 214 + CORNER_SIZE, CORNER_SIZE, CORNER_SIZE, shadowColor);
-    tft.fillRect(x + 72 - CORNER_SIZE, 214 + CORNER_SIZE, CORNER_SIZE,
+    tft.fillRect(x + tabWidth - CORNER_SIZE, 214 + CORNER_SIZE, CORNER_SIZE,
                  CORNER_SIZE, shadowColor);
-    tft.fillRect(x + CORNER_SIZE, 214, 72 - (CORNER_SIZE * 2), CORNER_SIZE,
+    tft.fillRect(x + CORNER_SIZE, 214, tabWidth - (CORNER_SIZE * 2), CORNER_SIZE,
                  shadowColor);
+
+    // Label
+    tft.setTextSize(2);
+
+    int16_t _x, _y;
+    uint16_t width, height;
+    tft.getTextBounds(label, 0, 0, &_x, &_y, &width, &height);
+    _x = x + ((tabWidth - width) / 2);
+    tft.setCursor(_x + 1, 214 + (CORNER_SIZE * 2) + 1);
+    tft.setTextColor(shadowColor);
+    tft.print(label);
+
+    tft.setTextColor(COLOR_WHITE);
+    tft.setCursor(_x, 214 + (CORNER_SIZE * 2));
+    tft.print(label);
 }
 
-void Display::drawTabs() {
-    drawTab(4, COLOR_BLUE, COLOR_BLUE_SHADOW);
-    drawTab(84, COLOR_GREEN, COLOR_GREEN_SHADOW);
-    drawTab(164, COLOR_PURPLE, COLOR_PURPLE_SHADOW);
-    drawTab(244, COLOR_RED, COLOR_RED_SHADOW);
+void Display::drawTabs(String labelA, String labelB, String labelC, String labelD) {
+    if (labelA != String("")) drawTab(4, labelA, COLOR_BLUE, COLOR_BLUE_SHADOW);
+    if (labelB != String("")) drawTab(84, labelB, COLOR_GREEN, COLOR_GREEN_SHADOW);
+    if (labelC != String("")) drawTab(164, labelC, COLOR_PURPLE, COLOR_PURPLE_SHADOW);
+    if (labelD != String("")) drawTab(244, labelD, COLOR_RED, COLOR_RED_SHADOW);
 }
 
 void Display::drawButton(uint16_t x, uint16_t y, uint16_t width,

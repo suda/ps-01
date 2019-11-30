@@ -57,7 +57,7 @@ void ScaleTestView::init() {
     // Init display
     _display.clearScreen();
     _display.drawDialog();
-    _display.drawTabs();
+    _display.drawTabs(String(""), String(""), String(""), String(""));
     _display.drawKeys(x, y, width, height, keyWidth, keys);
     drawWaveforms();
     _display.update();

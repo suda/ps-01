@@ -12,6 +12,8 @@ class KeypadTestView : public View {
     void handleStoreUpdate(uint8_t storeKey);
 
    private:
+    void init();
+
     float _scale[16] = {
         C3_HZ,    // 1
          C4S_HZ,  // 2

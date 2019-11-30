@@ -18,8 +18,8 @@ class Display {
     void end();
     void clearScreen();
     void drawDialog();
-    void drawTab(uint16_t x, uint16_t color, uint16_t shadowColor);
-    void drawTabs();
+    void drawTab(uint16_t x, String label, uint16_t color, uint16_t shadowColor);
+    void drawTabs(String labelA, String labelB, String labelC, String labelD);
     void drawButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
                     uint16_t color, uint16_t shadowColor);
     void drawKnobPositions(uint16_t attack, uint16_t decay, uint8_t sustain,

@@ -86,7 +86,7 @@ void Keypad::handleKey(SDL_Event &event) {
         [+] Vol +
         [Esc] Back
     */
-    int16_t key;
+    int16_t key = 0;
     switch (event.key.keysym.scancode) {
         // Keypad
         case SDL_SCANCODE_1:
@@ -161,7 +161,8 @@ void Keypad::handleKey(SDL_Event &event) {
     if (event.type != SDL_KEYUP) {
         return;
     }
-    int16_t encoder, change;
+    int16_t encoder = 0;
+    int16_t change = 0;
     switch (event.key.keysym.scancode) {
         case SDL_SCANCODE_9:
             encoder = ENCODER_BLUE;
