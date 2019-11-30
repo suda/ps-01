@@ -12,21 +12,24 @@ class KeypadTestView : public View {
         void handleStoreUpdate(uint8_t storeKey);
     private:
         float _scale[16] = {
-            C4_HZ,    // 1
+            C3_HZ,    // 1
               C4S_HZ, // 2
-            D4_HZ,    // 3
+            D3_HZ,    // 3
               D4S_HZ, // 4
-            E4_HZ,    // Q
-            F4_HZ,    // W
-              F4S_HZ, // E
-            G4_HZ,    // R
-              G4S_HZ, // A
-            A4_HZ,    // S
-              A4S_HZ, // D
-            B4_HZ,    // F
-            C5_HZ,    // Z
-              C5S_HZ, // X
-            D5_HZ,    // C
-              D5S_HZ  // v
+            E3_HZ,    // Q
+            F3_HZ,    // W
+              F3S_HZ, // E
+            G3_HZ,    // R
+              G3S_HZ, // A
+            A3_HZ,    // S
+              A3S_HZ, // D
+            B3_HZ,    // F
+            C4_HZ,    // Z
+              C4S_HZ, // X
+            D4_HZ,    // C
+              D4S_HZ  // v
         };
+        float _frequency;
+        float _octave;
+        bool _playing;
 };

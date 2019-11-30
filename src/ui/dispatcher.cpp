@@ -24,8 +24,10 @@ void Dispatcher::dispatchAction(uint8_t action, int16_t args[]) {
 }
 
 void Dispatcher::initViews() {
-    // scaleTestView = ScaleTestView();
-    // scaleTestView.setup(store, previousStore, display);
+    scaleTestView = ScaleTestView();
+    scaleTestView.setup(store, previousStore, display);
     keypadTestView = KeypadTestView();
     keypadTestView.setup(store, previousStore, display);
+    poliphonyTestView = PoliphonyTestView();
+    poliphonyTestView.setup(store, previousStore, display);
 }

@@ -3,16 +3,30 @@
 KeypadTestView::KeypadTestView() : View() {}
 
 void KeypadTestView::handleAction(uint8_t action, int16_t args[]) {
+    float _upFreq;
     switch (action)
     {
     case ACTION_VIEW_INIT:
-        Synth::instance()->setupAllVoices(WF_TRIANGLE, 200, 200, 1 << 6, 500, (1 << 15));
+        Synth::instance()->setupAllVoices(WF_SAWTOOTH, 1, 1, (1 << 8) - 1, 1, (1 << 15));
+        _octave = 1;
         break;
     case ACTION_KEY_DOWN:
-        Polyphony::instance()->startFrequency(_scale[args[0] - 1]);
+        _frequency = _scale[args[0] - 1];
+        Polyphony::instance()->startFrequency(_frequency * _octave);
         break;
     case ACTION_KEY_UP:
-        Polyphony::instance()->stopFrequency(_scale[args[0] - 1]);
+        _upFreq = _scale[args[0] - 1];
+        Polyphony::instance()->stopFrequency(_upFreq * 0.25);
+        Polyphony::instance()->stopFrequency(_upFreq * 0.5);
+        Polyphony::instance()->stopFrequency(_upFreq);
+        _playing = false;
+        break;
+    case ACTION_ENCODER_CHANGE:
+        Polyphony::instance()->stopFrequency(_frequency * _octave);
+        if (_octave == 1.0) _octave = 0.25;
+        else if (_octave == 0.25) _octave = 0.5;
+        else if (_octave == 0.5) _octave = 1.0;
+        Polyphony::instance()->startFrequency(_frequency * _octave);
         break;
     }
 }
