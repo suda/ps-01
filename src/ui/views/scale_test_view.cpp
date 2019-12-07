@@ -74,9 +74,9 @@ void ScaleTestView::handleStoreUpdate(uint8_t storeKey) {
     if (storeKey == STORE_ST_CURRENT_NOTE) {
         Synth::instance()->voices[0].setFrequency(scale[_store->stCurrentNote]);
         // Redraw the previous one...
-        _display.drawKey(x, y, height, keyWidth, _previousStore->stCurrentNote, COLOR_WHITE);
+        _display.drawKey(x, y, height, keyWidth, _previousStore->stCurrentNote, false);
         // ...and draw the current one
-        _display.drawKey(x, y, height, keyWidth, _store->stCurrentNote, COLOR_BLUE);
+        _display.drawKey(x, y, height, keyWidth, _store->stCurrentNote, true);
         _display.update();
     }
     if (storeKey == STORE_ST_CURRENT_WAVE) {

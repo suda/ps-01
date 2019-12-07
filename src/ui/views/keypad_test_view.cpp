@@ -11,13 +11,35 @@ void KeypadTestView::handleAction(uint8_t action, int16_t args[]) {
         case ACTION_KEY_DOWN:
             _frequency = _scale[args[0] - 1];
             Polyphony::instance()->startFrequency(_frequency * _octave);
+
+            _display.drawKey(
+                160 - ((18 * 11) / 2),
+                56 + (CORNER_SIZE * 4),
+                64,
+                18,
+                args[0] - 1,
+                true
+            );
+            _display.update();
             break;
         case ACTION_KEY_UP:
             _upFreq = _scale[args[0] - 1];
+            if (_upFreq == _frequency) {
+                _frequency = 0.0;
+            }
             Polyphony::instance()->stopFrequency(_upFreq * 0.25);
             Polyphony::instance()->stopFrequency(_upFreq * 0.5);
             Polyphony::instance()->stopFrequency(_upFreq);
-            _playing = false;
+
+            _display.drawKey(
+                160 - ((18 * 11) / 2),
+                56 + (CORNER_SIZE * 4),
+                64,
+                18,
+                args[0] - 1,
+                false
+            );
+            _display.update();
             break;
         case ACTION_ENCODER_CHANGE:
             Polyphony::instance()->stopFrequency(_frequency * _octave);
@@ -42,6 +64,8 @@ void KeypadTestView::init() {
     _display.clearScreen();
     _display.drawDialog();
     _display.drawTabs(String("ADSR"), String("OCTA"), String("WAVE"), String("KEY"));
+
+    _display.drawKeyboard(56 + (CORNER_SIZE * 4));
 
     _display.update();
 }

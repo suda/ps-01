@@ -166,6 +166,16 @@ void Display::drawKnobPositions(uint16_t attack, uint16_t decay,
     tft.print(release);
 }
 
+void Display::drawKeyboard(uint16_t y) {
+    uint8_t keys = 11;
+    uint8_t keyWidth = 18;
+    uint16_t width = keys * keyWidth;
+    uint16_t height = 64;
+    uint16_t x = 160 - (width / 2);
+    
+    drawKeys(x, y, width, height, keyWidth, keys);
+}
+
 void Display::drawKeys(uint16_t x, uint16_t y, uint16_t width,
                        uint16_t height, uint8_t keyWidth, uint8_t keys) {
     tft.fillRect(x, y, width, height, COLOR_WHITE);
@@ -179,13 +189,26 @@ void Display::drawKeys(uint16_t x, uint16_t y, uint16_t width,
         tft.drawFastVLine(x + (keyWidth * i), y, height, COLOR_BLACK);
         uint8_t j = i + 6;
         if ((j % 7 != 0) && ((j + 4) % 7 != 0)) {
-            tft.fillRect(x + (keyWidth * i) - CORNER_SIZE, y, CORNER_SIZE * 2,
+            tft.fillRect(x + (keyWidth * i) - CORNER_SIZE, y, CORNER_SIZE * 2 + 1,
                          30, COLOR_BLACK);
         }
     }
 }
 
 void Display::drawKey(uint16_t x, uint16_t y, uint16_t height, uint8_t keyWidth, uint8_t key,
-                      uint16_t color) {
-    tft.fillCircle(x + (keyWidth * (key + 1)) + 9, y + height - 14, 4, color);
+                      bool selected) {
+    uint8_t note = key % 12;
+    uint8_t skip = 2 * floor(key / 12);
+    skip += key % 12 < 10 ? floor((key % 12) / 5) : 1;
+
+    bool semitone = (note == 1) || (note == 3) ||
+         (note == 6) || (note == 8) || (note == 10);
+    uint16_t color = selected ? COLOR_BLUE :
+                        semitone ? COLOR_BLACK : COLOR_WHITE;
+    if (semitone) {
+        tft.fillCircle(x + ((keyWidth / 2) * (key + 3 + skip)), y + 30 - 8, 4, color);
+    } else {
+        tft.fillCircle(x + ((keyWidth / 2) * (key + 2 + skip)) + 9, y + height - 14, 4, color);
+    }
 }
+

@@ -16,9 +16,9 @@ class KeypadTestView : public View {
 
     float _scale[16] = {
         C3_HZ,    // 1
-         C4S_HZ,  // 2
+         C3S_HZ,  // 2
         D3_HZ,    // 3
-         D4S_HZ,  // 4
+         D3S_HZ,  // 4
         E3_HZ,    // Q
         F3_HZ,    // W
          F3S_HZ,  // E
@@ -30,9 +30,8 @@ class KeypadTestView : public View {
         C4_HZ,    // Z
          C4S_HZ,  // X
         D4_HZ,    // C
-         D4S_HZ   // v
+         D4S_HZ   // V
     };
     float _frequency;
     float _octave;
-    bool _playing;
 };

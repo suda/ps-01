@@ -12,8 +12,6 @@ class ScaleTestView : public View {
 
    private:
     void init();
-    void drawKeys();
-    void drawKey(uint8_t key, uint16_t color);
     void drawWaveforms();
     uint8_t keys;
     uint8_t keyWidth;
